@@ -2,7 +2,7 @@
 
 Anno Domini represents to Automative Differentiation because they have the sample abbreviation (AD).
 
-CS207 Group 15: 
+CS207 Group 15 Team Members: 
 
 - Simon Warchol 
 - Kaela Nelson 

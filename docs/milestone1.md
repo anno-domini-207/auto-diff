@@ -14,25 +14,21 @@ In automatic differentiation, we can visualize a function as a graph structure o
 
 We then are able to compute the derivatives through a process called the forward mode. In this process, after breaking down a function to its elementary components, we take the symbolic derivative of these components via the chain rule. For example, if we were to take the derivative of $sin(x)$, we would have that
 
-$$
-\frac {d}{dx} sin(x) = sin'(x)x'
-$$
+![enter image description here](https://latex.codecogs.com/gif.latex?%5Cfrac&space;%7Bd%7D%7Bdx%7D&space;sin%28x%29&space;=&space;sin%27%28x%29x%27)
+
 
 Where we treat “x” as a variable, and x prime is the symbolic derivative that serves as a placeholder for the actual value evaluated here. We then calculate the derivative (or gradient) by evaluating the partial derivatives of elementary functions with respect to each variable at the actual value.
 
 For the single output case, what we actually calculate via the forward model is the product of gradient and the initializaed vector p:
 
-$$
-D_p x = \nabla x \cdot p
-$$
+![enter image description here](https://latex.codecogs.com/png.latex?D_p&space;x&space;=&space;%5Cnabla&space;x&space;%5Ccdot&space;p)
 
 And for the multiple output case, what we actually calculate via the forward model is the product of Jacobian and the initializaed vector p:
 
-$$
-D_p x =  J p
-$$
+![enter image description here](https://latex.codecogs.com/png.latex?D_p&space;x&space;=&space;J\cdot&space;p)
 
 Thus we can obtain the gradient or Jacobian matrix of the function through different seeds of the vector p. 
+
 
 ## 3. How to Use *AnnoDomini*
 

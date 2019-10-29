@@ -1,18 +1,14 @@
-[![Build Status](https://travis-ci.org/anno-domini-207/cs207-FinalProject.svg?branch=master)](https://travis-ci.org/anno-domini-207/cs207-FinalProject.svg?branch=master)
+# Anno Domini [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build Status](https://travis-ci.org/anno-domini-207/cs207-FinalProject.svg?branch=master)](https://travis-ci.org/anno-domini-207/cs207-FinalProject.svg?branch=master) [![Coverage Status](https://codecov.io/gh/anno-domini-207/cs207-FinalProject/branch/master/graph/badge.svg)](https://codecov.io/gh/anno-domini-207/cs207-FinalProject)
 
-[![Coverage Status](https://codecov.io/gh/anno-domini-207/cs207-FinalProject/branch/master/graph/badge.svg)](https://codecov.io/gh/anno-domini-207/cs207-FinalProject)
+Anno Domini represents to Automative Differentiation because they have the sample abbreviation (AD).
 
-CS 207 Group 15
-Team Members
+CS207 Group 15: 
 
-- kwnelson@hsph.harvard.edu
+- Simon Warchol 
+- Kaela Nelson 
+- Qiuyang Yin
+- Yoon S. Park
 
-- Qiuyang Yin qiuyangyin@g.harvard.edu
 
-sangyoonpark@g.harvard.edu
-
-simonwarchol@g.harvard.edu
-
-https://github.com/anno-domini-207/cs207-FinalProject
 
 

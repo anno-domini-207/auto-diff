@@ -1,4 +1,4 @@
-# CS Final Project: Milestone 1
+# CS207 Final Project: Milestone 1
 
 **Group 15 : Simon Warchol, Kaela Nelson, Qiuyang Yin, Yoon S. Park**
 

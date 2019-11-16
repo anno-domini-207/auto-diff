@@ -1,45 +1,46 @@
 import sys
+
 sys.path.append("../")
 
-from AutoDiff import AD
+from AnnoDomini import AutoDiff as AD
 import numpy as np
 
-def test_on_AutoDiff_scaler():
 
+def test_on_AutoDiff_scaler():
     def test_neg():
         x = AD(10)
         f = -x
-        assert f == AD(-10,1)
+        assert f == AD(-10, 1)
 
     def test_add():
-        x = AD(2,1)
+        x = AD(2, 1)
         f = x + 4
-        assert f == AD(6,1)
-        y = AD(4,2)
-        assert x + y == AD(6,3)
+        assert f == AD(6, 1)
+        y = AD(4, 2)
+        assert x + y == AD(6, 3)
         f2 = x + 2 + x + 4
-        assert f2 == AD(10,2)
+        assert f2 == AD(10, 2)
 
     def test_radd():
         x = AD(2)
-        f = 4 + x;
-        assert f == AD(6,1)
-        assert x == AD(2,1)
+        f = 4 + x
+        assert f == AD(6, 1)
+        assert x == AD(2, 1)
 
     def test_sub():
         x = AD(5)
         f = x - 6
-        assert f == AD(-1,1)
-        y = AD(4,2)
-        assert x - y == AD(1,-1)
+        assert f == AD(-1, 1)
+        y = AD(4, 2)
+        assert x - y == AD(1, -1)
         f2 = x - x - x - 1
         assert f2 == AD(-6, -1)
-        assert x == AD(5,1)
+        assert x == AD(5, 1)
 
     def test_rsub():
         x = AD(5)
-        f = 6 - x;
-        assert f == AD(1,-1)
+        f = 6 - x
+        assert f == AD(1, -1)
         assert x == AD(5)
 
     def test_mul():
@@ -48,15 +49,15 @@ def test_on_AutoDiff_scaler():
         assert f1 == AD(15, 3)
         y = AD(10, 2)
         f2 = x * y
-        assert f2 == AD(50,20) # 1 * 10 + 5 * 2 = 20
-        f3 = x * x;
+        assert f2 == AD(50, 20)  # 1 * 10 + 5 * 2 = 20
+        f3 = x * x
         assert f3 == AD(25, 10)
 
     def test_rmul():
-        x = AD(5,1)
-        f = 2 * x;
+        x = AD(5, 1)
+        f = 2 * x
         assert f == AD(10, 2)
-        assert x == AD(5,1)
+        assert x == AD(5, 1)
 
     def test_truediv():
         x = AD(3)
@@ -69,7 +70,7 @@ def test_on_AutoDiff_scaler():
 
     def test_rtruediv():
         x = AD(2)
-        f = 1 / x;
+        f = 1 / x
         assert np.round(f.val, 2) == 0.5
         assert np.round(f.der, 2) == -0.25
 
@@ -108,7 +109,7 @@ def test_on_AutoDiff_scaler():
     test_mul()
     test_rmul()
     test_truediv()
-	test_rtruediv()
-	test_sin()
-	test_cos()
-	test_tan()
+    test_rtruediv()
+    test_sin()
+    test_cos()
+    test_tan()

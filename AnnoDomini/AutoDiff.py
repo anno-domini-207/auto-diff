@@ -4,6 +4,7 @@
 
 import numpy as np
 
+
 class AD:
     def __init__(self, val=0.0, der=1.0):
         self.val = val
@@ -115,7 +116,7 @@ class AD:
         return AD(val, der)
 
     def tan(self):
-        if ((self.val / np.pi) - 1/2) % 1 == 0:
+        if ((self.val / np.pi) - 1 / 2) % 1 == 0:
             raise ValueError("Domain error: tangent is undefined at (1/2+k)*pi where k is any integer!")
         if np.cos(self.val) == 0:
             raise ZeroDivisionError

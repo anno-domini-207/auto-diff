@@ -1,11 +1,11 @@
-# The AD class implements methods for (automatically) calculating derivatives of elementary functions.
+# The AutoDiff class implements methods for (automatically) calculating derivatives of elementary functions.
 # As of now (11/15/2019), the implementation is intended and works only for scalar functions of a single input,
 # but the functionality will be expanded in coming weeks to support multiple functions of multiple inputs.
 
 import numpy as np
 
 
-class AD:
+class AutoDiff:
     def __init__(self, val=0.0, der=1.0):
         self.val = val
         self.der = der
@@ -26,7 +26,7 @@ class AD:
         except AttributeError:
             val = self.val + other
             der = self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def __radd__(self, other):
         return self + other
@@ -38,7 +38,7 @@ class AD:
         except AttributeError:
             val = self.val - other
             der = self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def __rsub__(self, other):
         return self - other
@@ -50,7 +50,7 @@ class AD:
         except AttributeError:
             val = self.val * other
             der = self.der * other
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def __rmul__(self, other):
         return self * other
@@ -64,7 +64,7 @@ class AD:
         except AttributeError:
             val = self.val / other
             der = self.der / other
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def __rtruediv__(self, other):
         # Here, we only need to consider the case when `other` (numerator) is a number
@@ -73,12 +73,12 @@ class AD:
             raise ZeroDivisionError
         val = other / self.val
         der = -(other * self.der) / (self.val ** 2)  # By chain/quotient rule
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def __pow__(self, n):
         val = self.val ** n
         der = n * (self.val ** (n - 1)) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def __rpow__(self, n):
         if n > 0:
@@ -95,25 +95,25 @@ class AD:
             else:  # self.val == 0
                 val = 1
                 der = 0
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def __neg__(self):
         val = -self.val
         der = -self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def sqrt(self):
-        return AD(self.val, self.der) ** 0.5
+        return AutoDiff(self.val, self.der) ** 0.5
 
     def sin(self):
         val = np.sin(self.val)
         der = np.cos(self.val) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def cos(self):
         val = np.cos(self.val)
         der = -np.sin(self.val) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def tan(self):
         if ((self.val / np.pi) - 1 / 2) % 1 == 0:
@@ -122,7 +122,7 @@ class AD:
             raise ZeroDivisionError
         val = np.tan(self.val)
         der = ((1 / np.cos(self.val)) ** 2) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def arcsin(self):
         if not (-1 <= self.val <= 1):
@@ -131,7 +131,7 @@ class AD:
             raise ZeroDivisionError
         val = np.arcsin(self.val)
         der = (1 / np.sqrt(1 - (self.val ** 2))) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def arccos(self):
         if not (-1 <= self.val <= 1):
@@ -140,29 +140,29 @@ class AD:
             raise ZeroDivisionError
         val = np.arccos(self.val)
         der = (-1 / np.sqrt(1 - (self.val ** 2))) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def arctan(self):
         val = np.arctan(self.val)
         der = (1 / (1 + (self.val) ** 2)) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def sinh(self):
         val = np.sinh(self.val)
         der = np.cosh(self.val) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def cosh(self):
         val = np.cosh(self.val)
         der = np.sinh(self.val) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def tanh(self):
         if np.cosh(self.val) == 0:
             raise ZeroDivisionError
         val = np.tanh(self.val)
         der = (1 / (np.cosh(self.val) ** 2)) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def log(self):
         if self.val <= 0:
@@ -171,14 +171,14 @@ class AD:
             raise ZeroDivisionError
         val = np.log(self.val)
         der = (1 / self.val) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def exp(self):
         val = np.exp(self.val)
         der = np.exp(self.val) * self.der
-        return AD(val, der)
+        return AutoDiff(val, der)
 
     def logistic(self):
         val = 1 / (1 + np.exp(-self.val))
         der = np.exp(self.val) / ((1 + np.exp(self.val)) ** 2)
-        return AD(val, der)
+        return AutoDiff(val, der)

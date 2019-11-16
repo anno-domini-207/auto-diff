@@ -2,7 +2,7 @@ import sys
 
 sys.path.append("../")
 
-from AnnoDomini import AutoDiff as AD
+from AutoDiff import AD
 import numpy as np
 
 

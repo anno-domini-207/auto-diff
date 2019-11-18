@@ -23,11 +23,16 @@ How to use Anno Domini
 How to Install
 
 Install Via Pip
+
 .. code-block:: bash
+
     pip install -i https://test.pypi.org/simple/ AnnoDomini
 
 Install In a Virtual Environment
+
 .. code-block:: bash
+
+
     $ pip install virtualenv # If Necessary
     $ virtualenv venv
     $ source venv/bin/activate
@@ -35,8 +40,12 @@ Install In a Virtual Environment
     $ pip install pytest
     $ pip install -i https://test.pypi.org/simple/ AnnoDomini
     >> import AnnoDomini.AutoDiff as AD
-    >>> AD.AutoDiff(3)
+    >> AD.AutoDiff(3)
     Function Value: 3 | Derivative Value: 1.0
+    >> quit()
+    $ deactivate
+
+
 Note: Numpy and Pytest are also required. If they are missing an error message will indicate as much.
 
     

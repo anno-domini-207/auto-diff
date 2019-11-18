@@ -1,18 +1,246 @@
 Anno Domini's Documentation
 =======================================
 
-Guide
-^^^^^
+Introduction
+------------
 
+In machine learning, calculating the derivative and gradients of functions is essential. This is because machine learning algorithms are centered around minimizing an objective loss function. Traditionally, scientists have used numerical differentiation methods to compute these derivatives and gradients, which potentially accumulates floating point errors in calculations and penalizes accuracy.
+
+Automatic differentiation is an algorithm that can solve complex derivatives in a way that reduces these compounding floating point errors. The algorithm achieves this by breaking down functions into their elementary components and then calculates and evaluates derivatives at these elementary components. This allows the computer to solve derivatives and gradients more efficiently and precisely. This is a huge contribution to machine learning, as it allows scientists to achieve results with more precision.
+
+Background
+----------
+
+In automatic differentiation, we can visualize a function as a graph structure of calculations, where the input variables are represented as nodes, and each separate calculation is represented as an arrow directed to another node. These separate calculations (the arrows in the graph) are the function's elementary components.
+
+We then are able to compute the derivatives through a process called the forward mode. In this process, after breaking down a function to its elementary components, we take the symbolic derivative of these components via the chain rule. For example, if we were to take the derivative of :math:`\sin(x)`, we would have that :math:`\frac{d}{dx}\sin(x) = \sin^{\prime}(x)x^{\prime}`, where we treat “x” as a variable, and x prime is the symbolic derivative that serves as a placeholder for the actual value evaluated here. We then calculate the derivative (or gradient) by evaluating the partial derivatives of elementary functions with respect to each variable at the actual value.
+
+For the single output case, what we actually calculate via the forward model is the product of gradient and the initializaed vector p, represented mathematically as :math:`D_px = \Delta x \cdot p`. For the multiple output case, what we actually calculate via the forward model is the product of Jacobian and the initialized vector p: :math:`D_px = J\cdot p`. Thus we can obtain the gradient or Jacobian matrix of the function through different seeds of the vector p.
+
+How to use Anno Domini
+----------------------
+
+How to Install
+^^^^^^^^^^^^^^
+Walk them through the creation of a virtual environment; include basic demo
+
+How to Use
+^^^^^^^^^^
+
+Our package will allow the user to pass in a generic function, f. The user can then pass in any value of x for the derivative to be evaluated at. This allows the user to test out different values. Our function handles single and multi-variable inputs, as well as vectors, to make the package more generalizable. A few examples of how to implement our package are provided below.
+
+.. code-block:: python
+
+    from AnnoDomini import grad
+    def f(x):
+      return x ** 4
+    ad = grad(f)
+    print(ad(3))
+    >>>>>108
+
+.. code-block:: python
+
+    # multiple input:
+    def f(x, y, z):
+      return 2*x*y + z**4
+    ad = grad(f)
+    print(ad(1, 2, 3))
+    >>>>>[ 4. 2. 108.]
+
+.. code-block:: python
+
+    # multiple input and multiple output:
+    def f(x, y, z):
+    	return [2*x*y + z**4, x*y*z]
+    ad = grad(f)
+    print(ad(1, 2, 3))
+    >>>>>[[4. 2. 108.]
+    	  [6. 3. 2]]
+
+Software Organization
+---------------------
+
+Directory Structure
+^^^^^^^^^^^^^^^^^^^
+::
+
+  AnnoDomini/
+    AutoDiff.py
+  docs/
+    source/
+      .index.rst.swp
+      conf.py
+      index.rst (documentation file)
+    Makefile
+    make.bat
+    milestone1.md
+  tests/
+    initial_test.py
+    test_AutoDiff.py
+  .gitignore
+  .travis.yml
+  LICENSE
+  README.md
+
+Basic Modules
+^^^^^^^^^^^^^
+- AutoDiff.py
+
+  - Contains implementation of the master class and its methods for calculating derivatives of elementary functions such as addition and multiplication.
+
+- AutoDiffExtended.py
+
+  - Potentially contains additional functions to leverage the AD module for the optimization problem (May include finding roots where the derivative/gradient equals zero) and other extensions like sampling problems (May includes methods like hamiltonian monte carlo).
+
+  - If we have thought of other extensions and this file to be too long, we can split the model to several submodules.
+
+
+Testing
+^^^^^^^
+
+- Where do the tests live?
+- How are they run?
+- How are they integrated?
+
+Our tests are contained in tests/test_AutoDiff.py. Our test suites are hosted through TravisCI and CodeCov. We will run TravisCI first to test the accuracy and CodeCov to test the test coverage.
+
+Packaging
+^^^^^^^^^
+How can someone install our package - describe how someone can download and install manually (if not on PyPI).
+
+We will use Git to develop package; after we notice that the package is mature, we will follow instructions `here <https://python-packaging.readthedocs.io/en/latest/index.html/>`_ to package our code and distribute it on the PyPi. Instead of using a framework such as PyScaffold, we will adhere to the proposed directory structure. We prefer to offer necessary documentation via Markdown files so they are easily readable on Github. If time permits, we also want to use the *Sphinx* and *readthedocs* to publish our doumentations, since it is more user friendly.
+
+Implementation Details
+----------------------
+
+Core Data Structures
+^^^^^^^^^^^^^^^^^^^^
+Given that the computation table we will be constructing is inherently ordered, it makes sense to use a list or array to represent the necessary data. As we build and improve our AD implementation, we will look to optimize these structures via pre-allocation and leverage numpy arrays when possible. We will also be creating pandas dataframes in order to create a nice, well-structured table with good printing functionality.
+
+Core Classes
+^^^^^^^^^^^^
+
+Include Methods
+
+**AD Class**:
+
+Methods Included:
+
+::
+
+    def __init__
+    def __repr__
+    def __eq__
+    def __ne__
+    def __add__
+    def __radd__
+    def __sub__
+    def __rsub__
+    def __mul__
+    def __rmul__
+    def __truediv__
+    def __rtruediv__
+    def __pow__
+    def __rpow__
+    def __neg__
+    def sqrt
+    def sin
+    def cos
+    def tan
+    def arcsin
+    def arccos
+    def arctan
+    def sinh
+    def cosh
+    def tanh
+    def log
+    def exp
+    def logistic
+
+Similar to the implementation of dual numbers, we can calculate the forward mode of the automatic differentiation with defined AD class. Will include all necessary calculations of possible operations.
+
+.. code-block:: python
+
+    # AD class
+    class AD:
+    	def __init__(self, val=0, der=1):
+    		self.val = val
+    		self.der = der
+
+
+Important Attributes
+^^^^^^^^^^^^^^^^^^^^
+- self.var:  the value of the calculated function (can be a vector or scalar)
+
+- self.der: the derivative of the calculated function (can be a vector or scalar)
+
+External Dependencies
+^^^^^^^^^^^^^^^^^^^^^
+- **numpy** and **scipy**:
+
+  - scientific calculations
+
+  - accomodating several statistical probability functions
+
+- **pandas**:
+
+  - Visualization
+
+- **functools** (and other built in python dependencies):
+
+  - wrapping functions
+
+  - manipulating built in data structures
+
+- **pytest**
+
+  - testing
+
+Elementary Functions
+^^^^^^^^^^^^^^^^^^^^
+
+To handle these functions, we will overload these functions in the AD class, and define the updated derivative and value for the class. For instance, we may define the logarithmic function as follows:
+
+.. code-block:: python
+
+    class AD()
+    	...
+    	def log(self):
+    		# this would be called for numpy.log(AD)
+    		val = np.log(self.val)
+    		der = self.der * 1/self.val
+    		return AD(val,der)
+
+
+Include example of Newton's Method that uses AD?
+
+Additional Implementation
+^^^^^^^^^^^^^^^^^^^^^^^^^
+What aspects have you not implemented yet? What else do you plan on implementing?
+
+**Multivariable Input/Output**
+
+**Demo Class**:
+
+Run some demos (include optimization demo, etc). For now we have thought of the following three demos (could be updated afterwards):
+
+- Comparison between ad and numeric methods
+
+- Use newton's methods to calculate the root of a given function
+
+- Use hamiltonian monte carlo to sample from a given function
+
+.. code-block:: python
+
+    class Demo():
+    	def compare_ad_numeric(self):
+    		# demo of the automatic differentiation
+    	def newton_method(self,func = lambda x**2 - 2*x + 1):
+    		# demo of the newton's method to solve the roots
+    	def hamiltonian_monte_carlo(self,func = lambda x: np.exp(x ** 2))
+    		# demo of the hamiltonian monte carlo
+
+Future Features
+---------------
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

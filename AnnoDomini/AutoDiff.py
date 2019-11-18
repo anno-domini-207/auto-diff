@@ -41,7 +41,7 @@ class AutoDiff:
         return AutoDiff(val, der)
 
     def __rsub__(self, other):
-        return self - other
+        return -self + other
 
     def __mul__(self, other):
         try:
@@ -56,8 +56,12 @@ class AutoDiff:
         return self * other
 
     def __truediv__(self, other):
-        if (other == 0) or (other.val == 0):
-            raise ZeroDivisionError
+        try:
+            if other.val == 0:
+                raise ZeroDivisionError
+        except AttributeError:
+            if other == 0:
+                raise ZeroDivisionError            
         try:
             val = self.val / other.val
             der = ((self.der * other.val) - (other.der * self.val)) / (other.val ** 2)  # By quotient rule

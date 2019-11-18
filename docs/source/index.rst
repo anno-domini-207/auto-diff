@@ -24,38 +24,74 @@ How to Install
 ^^^^^^^^^^^^^^
 Walk them through the creation of a virtual environment; include basic demo
 
+pip install stuff here
+
 How to Use
 ^^^^^^^^^^
 
-Our package will allow the user to pass in a generic function, f. The user can then pass in any value of x for the derivative to be evaluated at. This allows the user to test out different values. Our function handles single and multi-variable inputs, as well as vectors, to make the package more generalizable. A few examples of how to implement our package are provided below.
+Example:
+Suppose we want to use Newton's Method, to find the root of :math:`x^2+2x+1`. We can the utilize the AnnoDomini package as follows:
 
 .. code-block:: python
 
-    from AnnoDomini import grad
-    def f(x):
-      return x ** 4
-    ad = grad(f)
-    print(ad(3))
-    >>>>>108
+    from AutoDiff import *
+    import numpy as np
+    from matplotlib import pyplot as plt
+    from scipy import linalg as la
 
-.. code-block:: python
+    f = lambda x: x**2 + 2*x + 1
+    x0 = 1.5
 
-    # multiple input:
-    def f(x, y, z):
-      return 2*x*y + z**4
-    ad = grad(f)
-    print(ad(1, 2, 3))
-    >>>>>[ 4. 2. 108.]
+    def newtons_method(f, x0, iters = 100, tol = 1e-6, alpha = 1):
+        """Use Newton's method to approximate a root.
 
-.. code-block:: python
+        Inputs:
+            f (function): A function to handle.
+            x0 (float): Initial guess.
+            iters (int): Maximum number of iterations before the function
+                returns. Defaults to 100.
+            tol (float): The function returns when the difference between
+                successive approximations is less than tol.
+            alpha (float): Defaults to 1.  Allows backstepping.
 
-    # multiple input and multiple output:
-    def f(x, y, z):
-    	return [2*x*y + z**4, x*y*z]
-    ad = grad(f)
-    print(ad(1, 2, 3))
-    >>>>>[[4. 2. 108.]
-    	  [6. 3. 2]]
+        Returns:
+            A float that is the root that Newton's method finds
+        """
+        # Newton's Method on Scalar Input
+        xold = x0
+        for i in range(iters):
+            # compute derivitive
+            temp = AD(xold)
+            df = f(temp)
+
+            #solve for x_k1
+            xnew = xold - alpha * f(xold)/df.der
+            if la.norm(xnew - xold) < tol:
+                return xnew
+            else:
+                xold = xnew
+
+        return xnew
+
+    ans = newtons_method(f,x0)
+
+    # plot solution
+    xs = np.linspace(-7,5,100)
+    plt.plot(xs, f(xs), label="f")
+    plt.scatter(ans, f(ans),label="Root")
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.title("Visual of Newton's Method on $x^2 + 2x + 1$")
+    plt.legend()
+    plt.show()
+
+.. figure:: example_plot1.jpg
+    :width: 2000px
+    :align: center
+    :height: 500px
+    :alt: alternate text
+    :figclass: align-center
+
 
 Software Organization
 ---------------------
@@ -219,6 +255,25 @@ Additional Implementation
 What aspects have you not implemented yet? What else do you plan on implementing?
 
 **Multivariable Input/Output**
+
+.. code-block:: python
+
+    # multiple input:
+    def f(x, y, z):
+      return 2*x*y + z**4
+    ad = grad(f)
+    print(ad(1, 2, 3))
+    >>>>>[ 4. 2. 108.]
+
+.. code-block:: python
+
+    # multiple input and multiple output:
+    def f(x, y, z):
+    	return [2*x*y + z**4, x*y*z]
+    ad = grad(f)
+    print(ad(1, 2, 3))
+    >>>>>[[4. 2. 108.]
+    	  [6. 3. 2]]
 
 **Demo Class**:
 

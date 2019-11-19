@@ -94,6 +94,7 @@ Suppose we want to to find the derivative of :math:`x^2+2x+1`. We can the utiliz
 
 .. code-block:: python
 
+    import AnnoDomini.AutoDiff as AD
     f = lambda x: x**2 + 2*x + 1
     temp = AD.AutoDiff(1.5)
     print(temp)
@@ -150,7 +151,9 @@ Testing
 - How are they run?
 - How are they integrated?
 
-Our tests are contained in tests/test_AutoDiff.py. Our test suites are hosted through TravisCI and CodeCov. We run TravisCI first to test the accuracy and CodeCov to test the test coverage.
+Our tests are contained in tests directory. test_AutoDiff.py is used to test the functions in the AutoDiff Class.
+
+Our test suites are hosted through TravisCI and CodeCov. We run TravisCI first to test the accuracy and CodeCov to test the test coverage. The results can be inferred via the README section.
 
 Packaging
 ^^^^^^^^^
@@ -163,7 +166,7 @@ Implementation Details
 ----------------------
 The AutoDiff class takes as input the value to evaluate the function at. It contains two important attributes, val and der, that respectively store the evaluated function and derivative values at each stage of evaluation.
 
-For instance, consider the case where we want to evaluate the derivative of `2*x**3+10` evaluated at `x` = 5.0.  This is achieved by first setting `x = AD.AutoDiff(5.0)`, which automatically stores function and derivative values of `x` evaluated at `x` = 5.0 (i.e. `x.val` = 5.0 and `x.der` = 1.0).  When we pass the desired expression (i.e. `2*x**3+10`) to Python, `x` is raised to the power of 3, which is carried through `AutoDiff`'s `__pow__` method that returns a new `AutoDiff` object with the updated `val` and `der` values.  Specifically, the new returned object in this case has `val` = 125.0 and `der` = 75.0, which are the function and derivative values of `x**3` evaluated at `x` = 5.0.  The same process occurs for the subsequent operation steps (i.e. multiplication by 2 and addition by 10), and we eventually obtain the `AutoDiff` object with the desired `val` and `der` values (i.e. function and derivative values of `2*x**3+10` evaluated at `x` = 5.0).
+For instance, consider the case where we want to evaluate the derivative of `2x^3+10` evaluated at `x = 5.0`.  This is achieved by first setting ``x = AD.AutoDiff(5.0)``, which automatically stores function and derivative values of `x` evaluated at `x = 5.0 (i.e. ``x.val`` = 5.0 and ``x.der`` = 1.0).  When we pass the desired expression (i.e. `2x^3+10`) to Python, `x` is raised to the power of 3, which is carried through `AutoDiff`'s `__pow__` method that returns a new `AutoDiff` object with the updated `val` and `der` values.  Specifically, the new returned object in this case has ``val = 125.0`` and ``der = 75.0``, which are the function and derivative values of `x^3` evaluated at `x = 5.0`.  The same process occurs for the subsequent operation steps (i.e. multiplication by 2 and addition by 10), and we eventually obtain the ``AutoDiff`` object with the desired `val` and `der` values (i.e. function and derivative values of `2x^3+10` evaluated at `x = 5.0`).
 
 Central to this entire process is the `AutoDiff` class which is initiated by:
 
@@ -198,7 +201,6 @@ As mentioned above, the `AutoDiff` class has its own methods that define its beh
     def arctan
     def sinh
     def cosh
-    def tanh
     def log
     def exp
     def logistic

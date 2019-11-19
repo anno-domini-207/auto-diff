@@ -149,7 +149,7 @@ Mathematically, consider the case where the user would like to input the functio
 
 .. code-block:: python
 
-    # Possible Implementation: multiple input, single output
+    # Possible Implementation: multiple inputs, single output
     def f(x, y):
       return x*y
 
@@ -162,7 +162,7 @@ Mathematically, consider the case where the user would like to input the two fun
 
 .. code-block:: python
 
-    # Possible Implementation: single input, multiple output
+    # Possible Implementation: single input, multiple outputs
     def f(x):
       return [x**2, 2*x]
 
@@ -175,7 +175,7 @@ Mathematically, consider the case where the user would like to input the two fun
 
 .. code-block:: python
 
-    # Possible Implementation: multiple input, multiple output
+    # Possible Implementation: multiple inputs, multiple outputs
     def f(x, y):
       return [x+y, xy]
 

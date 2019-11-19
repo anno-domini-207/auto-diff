@@ -58,13 +58,13 @@ How to Install
 
 
     $ python setup.py sdist
-    $ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+    $ twine upload dist/*
 
 **Install via Pip:**
 
 .. code-block:: bash
 
-    pip install -i https://test.pypi.org/simple/ AnnoDomini
+    pip install AnnoDomini
 
 **Install in a Virtual Environment:**
 
@@ -75,7 +75,7 @@ How to Install
     $ virtualenv venv
     $ source venv/bin/activate
     $ pip install numpy
-    $ pip install -i https://test.pypi.org/simple/ AnnoDomini
+    $ pip install AnnoDomini
     >> import AnnoDomini.AutoDiff as AD
     >> AD.AutoDiff(3)
     Function Value: 3 | Derivative Value: 1.0

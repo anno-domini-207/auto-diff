@@ -156,6 +156,12 @@ def test_tan():
     f = 3 * np.tan(x)
     assert np.round(f.val, 2) == 3.0
     assert np.round(f.der, 2) == 6.0
+    with np.testing.assert_raises(ValueError):
+        x = AD(np.pi / 2)
+        f = np.tan(x)
+    with np.testing.assert_raises(ZeroDivisionError):
+        x = AD(0)
+        f = np.tan(x)
 
 def test_arcsin():
     with np.testing.assert_raises(ValueError):

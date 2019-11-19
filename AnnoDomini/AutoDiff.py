@@ -161,18 +161,9 @@ class AutoDiff:
         der = np.sinh(self.val) * self.der
         return AutoDiff(val, der)
 
-    def tanh(self):
-        if np.cosh(self.val) == 0:
-            raise ZeroDivisionError
-        val = np.tanh(self.val)
-        der = (1 / (np.cosh(self.val) ** 2)) * self.der
-        return AutoDiff(val, der)
-
     def log(self):
         if self.val <= 0:
             raise ValueError("Domain error: Logarithm is defined for positive numbers only!")
-        if self.val == 0:
-            raise ZeroDivisionError
         val = np.log(self.val)
         der = (1 / self.val) * self.der
         return AutoDiff(val, der)

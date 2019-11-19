@@ -26,8 +26,8 @@ How to Install
     $ pip install virtualenv # If Necessary
     $ virtualenv venv
     $ source venv/bin/activate
-    $ pip install numpy
     $ pip install AnnoDomini
+    $ python
     >> import AnnoDomini.AutoDiff as AD
     >> AD.AutoDiff(3)
     Function Value: 3 | Derivative Value: 1.0

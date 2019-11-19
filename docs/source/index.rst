@@ -335,19 +335,17 @@ We will handle multiple inputs and multiple outputs in the following ways:
 
 AutoDiffExtended.py
 
-  - Potentially contains additional functions to leverage the AD module for the optimization problem (May include finding roots where the derivative/gradient equals zero) and other extensions like sampling problems (May includes methods like hamiltonian monte carlo).
+  - Contain additional functions to leverage the AutoDiff module for optimization problems (i.e. root-finding methods) and other extensions (i.e. hamiltonian monte carlo).
 
-  - If we have thought of other extensions and this file to be too long, we can split the model to several submodules.
+  - We will possibly split this model to submodules.
 
 **Demo Class**:
 
-Run some demos (include optimization demo, etc). For now we have thought of the following three demos (could be updated afterwards):
+Currently, we have implemented a demo of Newton's Method in this documentation. In the future, we will create a Demo class that runs demos on the following methods in addition to Newton's Method:
 
 - Comparison between ad and numeric methods
 
-- Use newton's methods to calculate the root of a given function
-
-- Use hamiltonian monte carlo to sample from a given function
+- Hamiltonian Monte Carlo to sample from a given function
 
 The structure would resemble:
 
@@ -356,12 +354,15 @@ The structure would resemble:
     class Demo():
     	def compare_ad_numeric(self):
     		# demo of the automatic differentiation
-    	def newton_method(self,func = lambda x**2 - 2*x + 1):
+    	def newton_method(self,func = lambda x**2 + 2*x + 1):
     		# demo of the newton's method to solve the roots
     	def hamiltonian_monte_carlo(self,func = lambda x: np.exp(x ** 2))
     		# demo of the hamiltonian monte carlo
 
 Future Features
 ---------------
+For our future feature, our idea is to provide an extensive guide of Newton's Method implementation that includes scalar and vector valued functions with single and multiple inputs. As a part of this guide, we will provide visuals and in depth explanation of the algorithm. Provided we have enough time, we could also generate a nice, cleaned up trace table as a visual for the demo functions we use.
+Additionally, we could also provide an extensive guide of the Hamiltonian Monte Carlo.
+
 .. toctree::
    :maxdepth: 2

@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
     name='AnnoDomini',
-    version='0.14',
+    version='0.15',
     scripts=['AnnoDomini/AutoDiff.py'],
     author="Simon Warchol",
     author_email="simonwarchol@g.harvard.edu",
@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/anno-domini-207/cs207-FinalProject/",
     packages=setuptools.find_packages(),
     install_requires=[
-        'numpy==1.15.2'],
+        'numpy >= 1.6'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

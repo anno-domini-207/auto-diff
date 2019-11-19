@@ -4,8 +4,11 @@ python:
 before_install:
   - pip install pytest pytest-cov
   - pip install codecov
+install:
+  - "pip install -r requirements.txt"
+  - "python setup.py -q install"
 script:
-  - pytest --cov=./
+  - pytest --cov AnnoDomini
 after_success:
   - codecov
 

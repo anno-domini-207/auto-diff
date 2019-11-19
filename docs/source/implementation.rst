@@ -199,3 +199,7 @@ The structure would resemble:
     		# demo of the newton's method to solve the roots
     	def hamiltonian_monte_carlo(self,func = lambda x: np.exp(x ** 2))
     		# demo of the hamiltonian monte carlo
+<<<<<<< HEAD
+=======
+  
+>>>>>>> origin

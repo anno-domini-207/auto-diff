@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/javatechy/dokr",
     packages=setuptools.find_packages(),
-    use_2to3=True,
+    python_requires='>=3',
     install_requires=[
         'pytest>=5.2.1',
         'numpy>=1.17.2'],

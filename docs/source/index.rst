@@ -4,7 +4,7 @@ Anno Domini's Documentation
 Introduction
 ------------
 
-In machine learning, calculating the derivative and gradients of functions is essential. This is because machine learning algorithms are centered around minimizing an objective loss function. Traditionally, scientists have used numerical differentiation methods to compute these derivatives and gradients, which potentially accumulates floating point errors in calculations and penalizes accuracy.
+Calculating the derivative and gradients of functions is essential to many computational and mathematical fields. In particular, this is useful in machine learning because these ML algorithms are centered around minimizing an objective loss function. Traditionally, scientists have used numerical differentiation methods to compute these derivatives and gradients, which potentially accumulates floating point errors in calculations and penalizes accuracy.
 
 Automatic differentiation is an algorithm that can solve complex derivatives in a way that reduces these compounding floating point errors. The algorithm achieves this by breaking down functions into their elementary components and then calculates and evaluates derivatives at these elementary components. This allows the computer to solve derivatives and gradients more efficiently and precisely. This is a huge contribution to machine learning, as it allows scientists to achieve results with more precision.
 
@@ -15,7 +15,36 @@ In automatic differentiation, we can visualize a function as a graph structure o
 
 We then are able to compute the derivatives through a process called the forward mode. In this process, after breaking down a function to its elementary components, we take the symbolic derivative of these components via the chain rule. For example, if we were to take the derivative of :math:`\sin(x)`, we would have that :math:`\frac{d}{dx}\sin(x) = \sin^{\prime}(x)x^{\prime}`, where we treat “x” as a variable, and x prime is the symbolic derivative that serves as a placeholder for the actual value evaluated here. We then calculate the derivative (or gradient) by evaluating the partial derivatives of elementary functions with respect to each variable at the actual value.
 
-For the single output case, what we actually calculate via the forward model is the product of gradient and the initializaed vector p, represented mathematically as :math:`D_px = \Delta x \cdot p`. For the multiple output case, what we actually calculate via the forward model is the product of Jacobian and the initialized vector p: :math:`D_px = J\cdot p`. Thus we can obtain the gradient or Jacobian matrix of the function through different seeds of the vector p.
+To visualize this further, consider the function, :math:`x^2+2x+1`. The computational graph looks like:
+
+.. figure:: ad_graph.jpg
+    :width: 2000px
+    :align: center
+    :height: 500px
+    :alt: alternate text
+    :figclass: align-center
+
+
+The corresponding evaluation trace looks like:
+
+===========   ===================  ======================  ===================================   ============
+Trace         Elementary Function  Current Function value  Elementary Function Derivative        :math:`f(1)`
+===========   ===================  ======================  ===================================   ============
+:math:`x_1`   :math:`x_1`          x                       1                                     1
+
+:math:`x_2`   :math:`x_2`          x                       1                                     1
+
+:math:`x_3`   :math:`x_3`          x                       1                                     1
+
+:math:`x_4`    :math:`x_1x_2`       :math:`x^2`            :math:`\dot{x_1}x_2 + x_1\dot{x_2}`   2
+
+:math:`x_5`   :math:`x_4 + 2x_3`   :math:`x^2 + 2x`        :math:`\dot{x_4} + 2\dot{x_3}`        4
+
+:math:`x_6`   :math:`x_5 + 1`      :math:`x^2 + 2x + 1`    :math:`\dot{x_5}`                     4
+===========   ===================  ======================  ===================================   ============
+
+For the single output case, what the forward model is calculating the product of gradient and the initializaed vector p, represented mathematically as :math:`D_px = \Delta x \cdot p`. For the multiple output case, the forward model calculates the product of Jacobian and the initialized vector p: :math:`D_px = J\cdot p`. We can obtain the gradient or Jacobian matrix of the function through different seeds of the vector p.
+
 
 How to use Anno Domini
 ----------------------
@@ -47,9 +76,6 @@ Install In a Virtual Environment
 
 Note: Numpy and Pytest are also required. If they are missing an error message will indicate as much.
 
-    
-
-
 
 How to Use
 ^^^^^^^^^^
@@ -59,7 +85,7 @@ Suppose we want to use Newton's Method, to find the root of :math:`x^2+2x+1`. We
 
 .. code-block:: python
 
-    from AutoDiff import *
+    import AnnoDomini.AutoDiff as AD
     import numpy as np
     from matplotlib import pyplot as plt
     from scipy import linalg as la
@@ -86,7 +112,7 @@ Suppose we want to use Newton's Method, to find the root of :math:`x^2+2x+1`. We
         xold = x0
         for i in range(iters):
             # compute derivitive
-            temp = AD(xold)
+            temp = AD.AutoDiff(xold)
             df = f(temp)
 
             #solve for x_k1
@@ -277,13 +303,11 @@ Include example of Newton's Method that uses AD?
 
 Additional Implementation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-What aspects have you not implemented yet? What else do you plan on implementing?
-
-**Multivariable Input/Output**
+**Multivariable Inputs/Outputs**
 
 .. code-block:: python
 
-    # multiple input:
+    # multiple input
     def f(x, y, z):
       return 2*x*y + z**4
     ad = grad(f)
@@ -292,7 +316,7 @@ What aspects have you not implemented yet? What else do you plan on implementing
 
 .. code-block:: python
 
-    # multiple input and multiple output:
+    # multiple input and multiple output
     def f(x, y, z):
     	return [2*x*y + z**4, x*y*z]
     ad = grad(f)

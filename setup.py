@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
     name='AnnoDomini',
-    version='0.25',
+    version='0.26'
     scripts=['AnnoDomini/AutoDiff.py'],
     author="Simon Warchol",
     author_email="simonwarchol@g.harvard.edu",

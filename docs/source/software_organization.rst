@@ -44,4 +44,4 @@ Packaging
 ---------
 Details on how to install our package are included in the section, **How to use Anno Domini**.
 
-We use Git to develop the package; after we notice that the package is mature, we follow instructions `here <https://python\-packaging.readthedocs.io/en/latest/index.html/>`_ to package our code and distribute it on the PyPi. Instead of using a framework such as PyScaffold, we will adhere to the proposed directory structure. We provide necessary documentation via both MD and .rst files (rendered through Sphinx) to provide a clean, readable format on Github.
+We use Git to develop the package; after we notice that the package is mature, we follow instructions `here <https://python\-packaging.readthedocs.io/en/latest/>`_ to package our code and distribute it on the PyPi. Instead of using a framework such as PyScaffold, we will adhere to the proposed directory structure. We provide necessary documentation via both MD and .rst files (rendered through Sphinx) to provide a clean, readable format on Github.

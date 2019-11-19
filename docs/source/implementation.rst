@@ -128,20 +128,6 @@ External Dependencies
 
   - scientific calculations
 
-- **scipy**:
-
-  - accomodating several statistical probability functions
-
-- **pandas**:
-
-  - Visualization
-
-- **functools** (and other built in python dependencies):
-
-  - wrapping functions
-
-  - manipulating built in data structures
-
 - **pytest**
 
   - testing
@@ -151,26 +137,49 @@ Additional Implementation
 
 **Multivariable Inputs/Outputs**
 
-We will handle multiple inputs and multiple outputs in the following ways:
+Currently, our package handles the single input, single output case. To extend further, we will also extend our package to handle the following cases:
+
+For the cases provided below (where the input variables are scalars), we would require the input to be an array, and we will handle the output as an array.
+
+- Multiple input, Single output
+
+Mathematically, consider the case where the user would like to input the function,
+:math:`f = xy`. Then, the derivative of this would be represented in a Jacobian matrix,
+:math:`J = [\frac{df_1}{dx}, \frac{df_1}{dy}] = [y,x]`.
 
 .. code-block:: python
 
-    # multiple input
-    def f(x, y, z):
-      return 2*x*y + z**4
-    ad = grad(f)
-    print(ad(1, 2, 3))
-    >>>>>[ 4. 2. 108.]
+    # Possible Implementation: multiple input, single output
+    def f(x, y):
+      return x*y
+
+
+- Single input, Multiple output
+
+Mathematically, consider the case where the user would like to input the two functions,
+:math:`F = [x^2, 2x]`. Then, the derivative of this would be represented in a Jacobian matrix,
+:math:`J = [\frac{df_1}{dx}, \frac{df_1}{dy}] = [2x,2]`.
 
 .. code-block:: python
 
-    # multiple input and multiple output
-    def f(x, y, z):
-    	return [2*x*y + z**4, x*y*z]
-    ad = grad(f)
-    print(ad(1, 2, 3))
-    >>>>>[[4. 2. 108.]
-    	  [6. 3. 2]]
+    # Possible Implementation: single input, multiple output
+    def f(x):
+      return [x**2, 2*x]
+
+
+- Multiple input, Multiple output
+
+Mathematically, consider the case where the user would like to input the two functions,
+:math:`F = [x+y, xy]`. Then, the derivative of this would be represented in a Jacobian matrix,
+:math:`J = [[\frac{df_1}{dx}, \frac{df_1}{dy}],[\frac{df_2}{dx}, \frac{df_3}{dy}]] = [[1, 1], [y, x]]`.
+
+.. code-block:: python
+
+    # Possible Implementation: multiple input, multiple output
+    def f(x, y):
+      return [x+y, xy]
+
+For the case where the input variables are arrays, we would store the values in the Jacobian matrix as a dictionary (for its intuitive structure) or an array.
 
 **Additional Module**
 
@@ -199,7 +208,3 @@ The structure would resemble:
     		# demo of the newton's method to solve the roots
     	def hamiltonian_monte_carlo(self,func = lambda x: np.exp(x ** 2))
     		# demo of the hamiltonian monte carlo
-<<<<<<< HEAD
-=======
-  
->>>>>>> origin

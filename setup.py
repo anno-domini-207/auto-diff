@@ -8,15 +8,11 @@ setuptools.setup(
     scripts=['AnnoDomini/AutoDiff.py'],
     author="Simon Warchol",
     author_email="simonwarchol@g.harvard.edu",
-    description="Harvar CS207 Automatic Differentiation Projec",
+    description="Harvar CS207 Automatic Differentiation Project",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/javatechy/dokr",
     packages=setuptools.find_packages(),
-    python_requires='>=3',
-    install_requires=[
-        'pytest>=5.2.1',
-        'numpy>=1.17.2'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

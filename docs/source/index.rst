@@ -101,7 +101,7 @@ Suppose we want to to find the derivative of :math:`x^2+2x+1`. We can the utiliz
     df = f(temp)
     >> Function Value: 6.25 | Derivative Value: 5.0
 
-Say we only want to access only the value of derivative component. Can do this as follows:
+Say we only want to access only the value or derivative component. We can do this as follows:
 
 .. code-block:: python
 
@@ -161,8 +161,7 @@ We use Git to develop the package; after we notice that the package is mature, w
 
 Implementation Details
 ----------------------
-
-The `AutoDiff` class takes as input the value to evaluate the function at.  It contains two important attributes, `val` and `der`, that respectively store the evaluated function and derivative values at each stage of evaluation.
+The AutoDiff class takes as input the value to evaluate the function at. It contains two important attributes, val and der, that respectively store the evaluated function and derivative values at each stage of evaluation.
 
 For instance, consider the case where we want to evaluate the derivative of `2*x**3+10` evaluated at `x` = 5.0.  This is achieved by first setting `x = AD.AutoDiff(5.0)`, which automatically stores function and derivative values of `x` evaluated at `x` = 5.0 (i.e. `x.val` = 5.0 and `x.der` = 1.0).  When we pass the desired expression (i.e. `2*x**3+10`) to Python, `x` is raised to the power of 3, which is carried through `AutoDiff`'s `__pow__` method that returns a new `AutoDiff` object with the updated `val` and `der` values.  Specifically, the new returned object in this case has `val` = 125.0 and `der` = 75.0, which are the function and derivative values of `x**3` evaluated at `x` = 5.0.  The same process occurs for the subsequent operation steps (i.e. multiplication by 2 and addition by 10), and we eventually obtain the `AutoDiff` object with the desired `val` and `der` values (i.e. function and derivative values of `2*x**3+10` evaluated at `x` = 5.0).
 
@@ -221,9 +220,7 @@ We can see that the method returns a new `AutoDiff` object with new updated `val
 
 Note that many methods in the `AutoDiff` class, such as `cos` and `exp`, rely on their counterparts in NumPy (e.g., `numpy.cos` and `numpy.exp`).  NumPy will play even more important role in our future development to support multiple functions of multiple inputs as NumPy arrays support fast and effective vectorized operations.
 
-The following code shows a deeper example of how our AutoDiff class is implemented and useful:
-
-Consider again the function, :math:`x^2+2x+1`. Suppose we want to use Newton's Method to find the root, using our package. Then we have:
+The following code shows a deeper example of how our AutoDiff class is implemented and useful. Consider again the function, :math:`x^2+2x+1`. Suppose we want to use Newton's Method to find the root, using our package. Then we have:
 
 .. code-block:: python
 
@@ -338,19 +335,17 @@ We will handle multiple inputs and multiple outputs in the following ways:
 
 AutoDiffExtended.py
 
-  - Potentially contains additional functions to leverage the AD module for the optimization problem (May include finding roots where the derivative/gradient equals zero) and other extensions like sampling problems (May includes methods like hamiltonian monte carlo).
+  - Contain additional functions to leverage the AutoDiff module for optimization problems (i.e. root-finding methods) and other extensions (i.e. hamiltonian monte carlo).
 
-  - If we have thought of other extensions and this file to be too long, we can split the model to several submodules.
+  - We will possibly split this model to submodules.
 
 **Demo Class**:
 
-Run some demos (include optimization demo, etc). For now we have thought of the following three demos (could be updated afterwards):
+Currently, we have implemented a demo of Newton's Method in this documentation. In the future, we will create a Demo class that runs demos on the following methods in addition to Newton's Method:
 
 - Comparison between ad and numeric methods
 
-- Use newton's methods to calculate the root of a given function
-
-- Use hamiltonian monte carlo to sample from a given function
+- Hamiltonian Monte Carlo to sample from a given function
 
 The structure would resemble:
 
@@ -359,12 +354,15 @@ The structure would resemble:
     class Demo():
     	def compare_ad_numeric(self):
     		# demo of the automatic differentiation
-    	def newton_method(self,func = lambda x**2 - 2*x + 1):
+    	def newton_method(self,func = lambda x**2 + 2*x + 1):
     		# demo of the newton's method to solve the roots
     	def hamiltonian_monte_carlo(self,func = lambda x: np.exp(x ** 2))
     		# demo of the hamiltonian monte carlo
 
 Future Features
 ---------------
+For our future feature, our idea is to provide an extensive guide of Newton's Method implementation that includes scalar and vector valued functions with single and multiple inputs. As a part of this guide, we will provide visuals and in depth explanation of the algorithm. Provided we have enough time, we could also generate a nice, cleaned up trace table as a visual for the demo functions we use.
+Additionally, we could also provide an extensive guide of the Hamiltonian Monte Carlo.
+
 .. toctree::
    :maxdepth: 2

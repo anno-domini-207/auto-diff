@@ -159,9 +159,7 @@ def test_tan():
     with np.testing.assert_raises(ValueError):
         x = AD(np.pi / 2)
         f = np.tan(x)
-    with np.testing.assert_raises(ZeroDivisionError):
-        x = AD(0)
-        f = np.tan(x)
+
 
 def test_arcsin():
     with np.testing.assert_raises(ValueError):

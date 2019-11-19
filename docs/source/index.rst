@@ -93,7 +93,7 @@ Suppose we want to to find the derivative of :math:`x^2+2x+1`. We can the utiliz
     df = f(temp)
     >> Function Value: 6.25 | Derivative Value: 5.0
 
-Say we only want to access only the value of derivative component. Can do this as follows:
+Say we only want to access only the value or derivative component. We can do this as follows:
 
 .. code-block:: python
 
@@ -156,7 +156,7 @@ Implementation Details
 
 Core Data Structures
 ^^^^^^^^^^^^^^^^^^^^
-Given that the computation table we will be constructing is inherently ordered, it makes sense to use a list or array to represent the necessary data. As we build and improve our AD implementation, we will look to optimize these structures via pre-allocation and leverage numpy arrays when possible. We will also be creating pandas dataframes in order to create a nice, well-structured table with good printing functionality.
+Given that the computation table we will be constructing is inherently ordered, it makes sense to use arrays to represent the necessary data. As we build and improve our AutoDiff implementation, we will look to optimize these structures via pre-allocation and leverage numpy arrays when possible. We will also be creating pandas dataframes in order to create a nice, well-structured table with good printing functionality.
 
 Core Classes
 ^^^^^^^^^^^^

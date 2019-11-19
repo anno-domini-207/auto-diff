@@ -52,6 +52,14 @@ How to use Anno Domini
 How to Install
 ^^^^^^^^^^^^^^
 
+**Internal Note: How to Publish to Pip**
+
+.. code-block:: bash
+
+
+    $ python setup.py sdist
+    $ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
 **Install via Pip:**
 
 .. code-block:: bash

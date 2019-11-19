@@ -11,7 +11,7 @@ class AutoDiff:
         self.der = der
 
     def __repr__(self):
-        return f'Function Value: {self.val} | Derivative Value: {self.der}'
+        return f"Function Value: {self.val} | Derivative Value: {self.der}"
 
     def __eq__(self, other):
         return (self.val == other.val) and (self.der == other.der)

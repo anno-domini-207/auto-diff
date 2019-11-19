@@ -15,7 +15,7 @@ In automatic differentiation, we can visualize a function as a graph structure o
 
 We then are able to compute the derivatives through a process called the forward mode. In this process, after breaking down a function to its elementary components, we take the symbolic derivative of these components via the chain rule. For example, if we were to take the derivative of :math:`\sin(x)`, we would have that :math:`\frac{d}{dx}\sin(x) = \sin^{\prime}(x)x^{\prime}`, where we treat “x” as a variable, and x prime is the symbolic derivative that serves as a placeholder for the actual value evaluated here. We then calculate the derivative (or gradient) by evaluating the partial derivatives of elementary functions with respect to each variable at the actual value.
 
-To visualize this further, consider the function, :math:`x^2+2x+1`. The computational graph looks like:
+For further visualization automatic differentiation, consider the function, :math:`x^2+2x+1`. The computational graph for this function looks like:
 
 .. figure:: ad_graph.jpg
     :width: 2000px
@@ -50,14 +50,15 @@ How to use Anno Domini
 ----------------------
 
 How to Install
+^^^^^^^^^^^^^^
 
-Install Via Pip
+**Install via Pip:**
 
 .. code-block:: bash
 
     pip install -i https://test.pypi.org/simple/ AnnoDomini
 
-Install In a Virtual Environment
+**Install in a Virtual Environment:**
 
 .. code-block:: bash
 
@@ -74,75 +75,33 @@ Install In a Virtual Environment
     $ deactivate
 
 
-Note: Numpy and Pytest are also required. If they are missing an error message will indicate as much.
+*Note*: Numpy and Pytest are also required. If they are missing an error message will indicate as much.
 
 
 How to Use
 ^^^^^^^^^^
 
-Example:
-Suppose we want to use Newton's Method, to find the root of :math:`x^2+2x+1`. We can the utilize the AnnoDomini package as follows:
+Consider the following example in scalar input case:s
+Suppose we want to to find the derivative of :math:`x^2+2x+1`. We can the utilize the AnnoDomini package as follows:
 
 .. code-block:: python
 
-    import AnnoDomini.AutoDiff as AD
-    import numpy as np
-    from matplotlib import pyplot as plt
-    from scipy import linalg as la
-
     f = lambda x: x**2 + 2*x + 1
-    x0 = 1.5
+    temp = AD.AutoDiff(1.5)
+    print(temp)
+    >> Function Value: 1.5 | Derivative Value: 1.0
+    df = f(temp)
+    >> Function Value: 6.25 | Derivative Value: 5.0
 
-    def newtons_method(f, x0, iters = 100, tol = 1e-6, alpha = 1):
-        """Use Newton's method to approximate a root.
+Say we only want to access only the value of derivative component. Can do this as follows:
 
-        Inputs:
-            f (function): A function to handle.
-            x0 (float): Initial guess.
-            iters (int): Maximum number of iterations before the function
-                returns. Defaults to 100.
-            tol (float): The function returns when the difference between
-                successive approximations is less than tol.
-            alpha (float): Defaults to 1.  Allows backstepping.
+.. code-block:: python
 
-        Returns:
-            A float that is the root that Newton's method finds
-        """
-        # Newton's Method on Scalar Input
-        xold = x0
-        for i in range(iters):
-            # compute derivitive
-            temp = AD.AutoDiff(xold)
-            df = f(temp)
-
-            #solve for x_k1
-            xnew = xold - alpha * f(xold)/df.der
-            if la.norm(xnew - xold) < tol:
-                return xnew
-            else:
-                xold = xnew
-
-        return xnew
-
-    ans = newtons_method(f,x0)
-
-    # plot solution
-    xs = np.linspace(-7,5,100)
-    plt.plot(xs, f(xs), label="f")
-    plt.scatter(ans, f(ans),label="Root")
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.title("Visual of Newton's Method on $x^2 + 2x + 1$")
-    plt.legend()
-    plt.show()
-
-.. figure:: example_plot1.jpg
-    :width: 2000px
-    :align: center
-    :height: 500px
-    :alt: alternate text
-    :figclass: align-center
-
+    val, der = df.val, df.der
+    print(der)
+    >> 5.0
+    print(val)
+    >> 6.25
 
 Software Organization
 ---------------------
@@ -173,13 +132,7 @@ Basic Modules
 ^^^^^^^^^^^^^
 - AutoDiff.py
 
-  - Contains implementation of the master class and its methods for calculating derivatives of elementary functions such as addition and multiplication.
-
-- AutoDiffExtended.py
-
-  - Potentially contains additional functions to leverage the AD module for the optimization problem (May include finding roots where the derivative/gradient equals zero) and other extensions like sampling problems (May includes methods like hamiltonian monte carlo).
-
-  - If we have thought of other extensions and this file to be too long, we can split the model to several submodules.
+  - Contains implementation of the master class and its methods for calculating derivatives of elementary functions (list of methods shown in **Core Classes** section below).
 
 
 Testing
@@ -189,13 +142,14 @@ Testing
 - How are they run?
 - How are they integrated?
 
-Our tests are contained in tests/test_AutoDiff.py. Our test suites are hosted through TravisCI and CodeCov. We will run TravisCI first to test the accuracy and CodeCov to test the test coverage.
+Our tests are contained in tests/test_AutoDiff.py. Our test suites are hosted through TravisCI and CodeCov. We run TravisCI first to test the accuracy and CodeCov to test the test coverage.
 
 Packaging
 ^^^^^^^^^
-How can someone install our package - describe how someone can download and install manually (if not on PyPI).
 
-We will use Git to develop package; after we notice that the package is mature, we will follow instructions `here <https://python-packaging.readthedocs.io/en/latest/index.html/>`_ to package our code and distribute it on the PyPi. Instead of using a framework such as PyScaffold, we will adhere to the proposed directory structure. We prefer to offer necessary documentation via Markdown files so they are easily readable on Github. If time permits, we also want to use the *Sphinx* and *readthedocs* to publish our doumentations, since it is more user friendly.
+Details on how to install our package are included in the section, **How to use Anno Domini**.
+
+We use Git to develop the package; after we notice that the package is mature, we follow instructions `here <https://python\-packaging.readthedocs.io/en/latest/index.html/>`_ to package our code and distribute it on the PyPi. Instead of using a framework such as PyScaffold, we will adhere to the proposed directory structure. We provide necessary documentation via both MD and .rst files (rendered through Sphinx) to provide a clean, readable format on Github.
 
 Implementation Details
 ----------------------
@@ -207,11 +161,9 @@ Given that the computation table we will be constructing is inherently ordered, 
 Core Classes
 ^^^^^^^^^^^^
 
-Include Methods
+**AutoDiff Class**:
 
-**AD Class**:
-
-Methods Included:
+Methods Included in AutoDiff:
 
 ::
 
@@ -244,28 +196,95 @@ Methods Included:
     def exp
     def logistic
 
-Similar to the implementation of dual numbers, we can calculate the forward mode of the automatic differentiation with defined AD class. Will include all necessary calculations of possible operations.
+The structure of the AutoDiff class looks as follows:
 
 .. code-block:: python
 
-    # AD class
-    class AD:
+    class AutoDiff:
     	def __init__(self, val=0, der=1):
     		self.val = val
     		self.der = der
 
+The following code shows a deeper example of how our AutoDiff class is implemented and useful:
+
+Consider again the function, :math:`x^2+2x+1`. Suppose we want to use Newton's Method to find the root, using our package. Then we have:
+
+.. code-block:: python
+
+    import AnnoDomini.AutoDiff as AD
+    import numpy as np
+    from matplotlib import pyplot as plt
+    from scipy import linalg as la
+
+    f = lambda x: x**2 + 2*x + 1
+    x0 = 1.5
+
+    def newtons_method(f, x0, iters = 100, tol = 1e-6, alpha = 1):
+        """Use Newton's method to approximate a root.
+
+        Inputs:
+            f (function): A function to handle.
+            x0 (float): Initial guess.
+            iters (int): Maximum number of iterations before the function
+                returns. Defaults to 100.
+            tol (float): The function returns when the difference between
+                successive approximations is less than tol.
+            alpha (float): Defaults to 1.  Allows backstepping.
+
+        Returns:
+            A float that is the root that Newton's method finds
+        """
+        # Newton's Method on Scalar Input
+        xold = x0
+        for i in range(iters):
+            # compute derivative via AutoDiff
+            temp = AD.AutoDiff(xold)
+            df = f(temp)
+
+            #solve for x_k1
+            xnew = xold - alpha * f(xold)/df.der
+            if la.norm(xnew - xold) < tol:
+                return xnew
+            else:
+                xold = xnew
+
+        return xnew
+
+    ans = newtons_method(f,x0)
+
+    # plot solution
+    xs = np.linspace(-7,5,100)
+    plt.plot(xs, f(xs), label="f")
+    plt.scatter(ans, f(ans),label="Root")
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.title("Visual of Newton's Method on $x^2 + 2x + 1$")
+    plt.legend()
+    plt.show()
+
+.. figure:: example_plot1.jpg
+    :width: 2000px
+    :align: center
+    :height: 500px
+    :alt: alternate text
+    :figclass: align-center
+
 
 Important Attributes
 ^^^^^^^^^^^^^^^^^^^^
+The AutoDiff class contains the following attributes:
+
 - self.var:  the value of the calculated function (can be a vector or scalar)
 
 - self.der: the derivative of the calculated function (can be a vector or scalar)
 
 External Dependencies
 ^^^^^^^^^^^^^^^^^^^^^
-- **numpy** and **scipy**:
+- **numpy** :
 
   - scientific calculations
+
+- **scipy**:
 
   - accomodating several statistical probability functions
 
@@ -290,20 +309,21 @@ To handle these functions, we will overload these functions in the AD class, and
 
 .. code-block:: python
 
-    class AD()
+    class AutoDiff()
     	...
     	def log(self):
     		# this would be called for numpy.log(AD)
     		val = np.log(self.val)
     		der = self.der * 1/self.val
-    		return AD(val,der)
+    		return AutoDiff(val,der)
 
-
-Include example of Newton's Method that uses AD?
+A full list of methods are included in the **AutoDiff Methods** section above.
 
 Additional Implementation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 **Multivariable Inputs/Outputs**
+
+We will handle multiple inputs and multiple outputs in the following ways:
 
 .. code-block:: python
 
@@ -324,6 +344,14 @@ Additional Implementation
     >>>>>[[4. 2. 108.]
     	  [6. 3. 2]]
 
+**Additional Module**
+
+AutoDiffExtended.py
+
+  - Potentially contains additional functions to leverage the AD module for the optimization problem (May include finding roots where the derivative/gradient equals zero) and other extensions like sampling problems (May includes methods like hamiltonian monte carlo).
+
+  - If we have thought of other extensions and this file to be too long, we can split the model to several submodules.
+
 **Demo Class**:
 
 Run some demos (include optimization demo, etc). For now we have thought of the following three demos (could be updated afterwards):
@@ -333,6 +361,8 @@ Run some demos (include optimization demo, etc). For now we have thought of the 
 - Use newton's methods to calculate the root of a given function
 
 - Use hamiltonian monte carlo to sample from a given function
+
+The structure would resemble:
 
 .. code-block:: python
 

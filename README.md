@@ -5,7 +5,7 @@ Anno Domini is equivalent to Automative Differentiation because they have the sa
 ## Quick Start
 
 ```
-pip install -i https://test.pypi.org/simple/ AnnoDomini
+pip install AnnoDomini
 ```
 
 ```python
@@ -17,6 +17,7 @@ print(temp)
 ```
 
 **Documentation(Early Version): [https://cs207-finalproject-group15.readthedocs.io/en/latest/](https://cs207-finalproject-group15.readthedocs.io/en/latest/)**
+
 
 **PyPI: [https://pypi.org/project/AnnoDomini/](https://pypi.org/project/AnnoDomini/)**
 

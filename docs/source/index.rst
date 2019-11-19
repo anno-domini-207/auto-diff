@@ -37,7 +37,6 @@ Install In a Virtual Environment
     $ virtualenv venv
     $ source venv/bin/activate
     $ pip install numpy
-    $ pip install pytest
     $ pip install -i https://test.pypi.org/simple/ AnnoDomini
     >> import AnnoDomini.AutoDiff as AD
     >> AD.AutoDiff(3)

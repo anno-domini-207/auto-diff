@@ -154,23 +154,23 @@ We use Git to develop the package; after we notice that the package is mature, w
 Implementation Details
 ----------------------
 
-Core Data Structures
-^^^^^^^^^^^^^^^^^^^^
-Given that the computation table we will be constructing is inherently ordered, it makes sense to use a list or array to represent the necessary data. As we build and improve our AD implementation, we will look to optimize these structures via pre-allocation and leverage numpy arrays when possible. We will also be creating pandas dataframes in order to create a nice, well-structured table with good printing functionality.
+The `AutoDiff` class takes as input the value to evaluate the function at.  It contains two important attributes, `val` and `der`, that respectively store the evaluated function and derivative values at each stage of evaluation.
 
-Core Classes
-^^^^^^^^^^^^
+For instance, consider the case where we want to evaluate the derivative of `2*x**3+10` evaluated at `x` = 5.0.  This is achieved by first setting `x = AD.AutoDiff(5.0)`, which automatically stores function and derivative values of `x` evaluated at `x` = 5.0 (i.e. `x.val` = 5.0 and `x.der` = 1.0).  When we pass the desired expression (i.e. `2*x**3+10`) to Python, `x` is raised to the power of 3, which is carried through `AutoDiff`'s `__pow__` method that returns a new `AutoDiff` object with the updated `val` and `der` values.  Specifically, the new returned object in this case has `val` = 125.0 and `der` = 75.0, which are the function and derivative values of `x**3` evaluated at `x` = 5.0.  The same process occurs for the subsequent operation steps (i.e. multiplication by 2 and addition by 10), and we eventually obtain the `AutoDiff` object with the desired `val` and `der` values (i.e. function and derivative values of `2*x**3+10` evaluated at `x` = 5.0).
 
-**AutoDiff Class**:
+Central to this entire process is the `AutoDiff` class which is initiated by:
 
-Methods Included in AutoDiff:
+.. code-block:: python
+
+    class AutoDiff:
+        def __init__(self, val=0.0, der=1.0):
+            self.val = val
+            self.der = der
+
+As mentioned above, the `AutoDiff` class has its own methods that define its behavior for common elementary functions such as addition and multiplication.  Specifically, we currently have the following methods implemented:
 
 ::
 
-    def __init__
-    def __repr__
-    def __eq__
-    def __ne__
     def __add__
     def __radd__
     def __sub__
@@ -196,14 +196,22 @@ Methods Included in AutoDiff:
     def exp
     def logistic
 
-The structure of the AutoDiff class looks as follows:
+As a simple illustration, here is the way the `__add__` method is implemented:
 
 .. code-block:: python
 
-    class AutoDiff:
-    	def __init__(self, val=0, der=1):
-    		self.val = val
-    		self.der = der
+    def __add__(self, other):
+        try:
+            val = self.val + other.val
+            der = self.der + other.der
+        except AttributeError:
+            val = self.val + other
+            der = self.der
+        return AutoDiff(val, der)
+
+We can see that the method returns a new `AutoDiff` object with new updated `val` and `der`.
+
+Note that many methods in the `AutoDiff` class, such as `cos` and `exp`, rely on their counterparts in NumPy (e.g., `numpy.cos` and `numpy.exp`).  NumPy will play even more important role in our future development to support multiple functions of multiple inputs as NumPy arrays support fast and effective vectorized operations.
 
 The following code shows a deeper example of how our AutoDiff class is implemented and useful:
 
@@ -269,15 +277,6 @@ Consider again the function, :math:`x^2+2x+1`. Suppose we want to use Newton's M
     :alt: alternate text
     :figclass: align-center
 
-
-Important Attributes
-^^^^^^^^^^^^^^^^^^^^
-The AutoDiff class contains the following attributes:
-
-- self.var:  the value of the calculated function (can be a vector or scalar)
-
-- self.der: the derivative of the calculated function (can be a vector or scalar)
-
 External Dependencies
 ^^^^^^^^^^^^^^^^^^^^^
 - **numpy** :
@@ -301,23 +300,6 @@ External Dependencies
 - **pytest**
 
   - testing
-
-Elementary Functions
-^^^^^^^^^^^^^^^^^^^^
-
-To handle these functions, we will overload these functions in the AD class, and define the updated derivative and value for the class. For instance, we may define the logarithmic function as follows:
-
-.. code-block:: python
-
-    class AutoDiff()
-    	...
-    	def log(self):
-    		# this would be called for numpy.log(AD)
-    		val = np.log(self.val)
-    		der = self.der * 1/self.val
-    		return AutoDiff(val,der)
-
-A full list of methods are included in the **AutoDiff Methods** section above.
 
 Additional Implementation
 ^^^^^^^^^^^^^^^^^^^^^^^^^

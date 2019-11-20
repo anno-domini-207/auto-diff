@@ -137,49 +137,59 @@ Additional Implementation
 
 **Multivariable Inputs/Outputs**
 
-Currently, our package handles the single input, single output case. To extend further, we will also extend our package to handle the following cases:
+Currently, our package handles the single input, single output case. We will also extend our package to handle the following cases:
 
-For the cases provided below (where the input variables are scalars), we would require the input to be an array, and we will handle the output as an array.
+1. Multiple Input, Single Output
 
-- Multiple input, Single output
-
-Mathematically, consider the case where the user would like to input the function,
+Consider the case where the user would like to input the function,
 :math:`f = xy`. Then, the derivative of this would be represented in a Jacobian matrix,
 :math:`J = [\frac{df_1}{dx}, \frac{df_1}{dy}] = [y,x]`.
 
 .. code-block:: python
 
-    # Possible Implementation: multiple inputs, single output
-    def f(x, y):
-      return x*y
+    # Potential Implementation: Multiple Input, Single Output
+    x = AD.AutoDiff(3., [1., 0.])
+    y = AD.AutoDiff(2., [0., 1.])
+    z = x*y
+    print(z.val)
+    >>> 6.0
+    print(z.der)
+    >>> [2.0, 3.0]
 
+2. Single Input, Multiple Output
 
-- Single input, Multiple output
-
-Mathematically, consider the case where the user would like to input the two functions,
+Consider the case where the user would like to input the two functions,
 :math:`F = [x^2, 2x]`. Then, the derivative of this would be represented in a Jacobian matrix,
 :math:`J = [\frac{df_1}{dx}, \frac{df_1}{dy}] = [2x,2]`.
 
 .. code-block:: python
 
-    # Possible Implementation: single input, multiple outputs
-    def f(x):
-      return [x**2, 2*x]
+    # Potential Implementation: Single Input, Multiple Output
+    x = AD.AutoDiff(3., 1.)
+    z = [x**2, 2*x]
+    print(z.val)
+    >>> [9.0, 6.0]
+    print(z.der)
+    >>> [6.0, 2.0]
 
+3. Multiple Input, Multiple Output
 
-- Multiple input, Multiple output
-
-Mathematically, consider the case where the user would like to input the two functions,
+Consider the case where the user would like to input the two functions,
 :math:`F = [x+y, xy]`. Then, the derivative of this would be represented in a Jacobian matrix,
-:math:`J = [[\frac{df_1}{dx}, \frac{df_1}{dy}],[\frac{df_2}{dx}, \frac{df_3}{dy}]] = [[1, 1], [y, x]]`.
+:math:`J = [[\frac{df_1}{dx}, \frac{df_1}{dy}],[\frac{df_2}{dx}, \frac{df_2}{dy}]] = [[1, 1], [y, x]]`.
 
 .. code-block:: python
 
-    # Possible Implementation: multiple inputs, multiple outputs
-    def f(x, y):
-      return [x+y, xy]
+    # Potential Implementation: Multiple Input, Multiple Output
+    x = AD.AutoDiff(3., [1., 0.])
+    y = AD.AutoDiff(2., [0., 1.])
+    z = [x+y, x*y]
+    print(z.val)
+    >>> [5.0, 6.0]
+    print(z.der)
+    >>> [[1.0, 1.0], [2.0, 3.0]]
 
-For the case where the input variables are arrays, we would store the values in the Jacobian matrix as a dictionary (for its intuitive structure) or an array.
+For the case where the input variables are arrays (instead of scalars), we are considering to store the values in the Jacobian matrix as a dictionary for its intuitive structure and flexibility to handle different lengths/sizes.
 
 **Additional Module**
 

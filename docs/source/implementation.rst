@@ -1,9 +1,9 @@
 Implementation Details
 =======================================
 
-The AutoDiff class takes as input the value to evaluate the function at. It contains two important attributes, val and der, that respectively store the evaluated function and derivative values at each stage of evaluation.
+The `AutoDiff` class takes as input the value to evaluate the function at. It contains two important attributes, val and der, that respectively store the evaluated function and derivative values at each stage of evaluation.
 
-For instance, consider the case where we want to evaluate the derivative of `2x^3+10` evaluated at `x = 5.0`.  This is achieved by first setting ``x = AD.AutoDiff(5.0)``, which automatically stores function and derivative values of `x` evaluated at `x = 5.0 (i.e. ``x.val`` = 5.0 and ``x.der`` = 1.0).  When we pass the desired expression (i.e. `2x^3+10`) to Python, `x` is raised to the power of 3, which is carried through `AutoDiff`'s `__pow__` method that returns a new `AutoDiff` object with the updated `val` and `der` values.  Specifically, the new returned object in this case has ``val = 125.0`` and ``der = 75.0``, which are the function and derivative values of `x^3` evaluated at `x = 5.0`.  The same process occurs for the subsequent operation steps (i.e. multiplication by 2 and addition by 10), and we eventually obtain the ``AutoDiff`` object with the desired `val` and `der` values (i.e. function and derivative values of `2x^3+10` evaluated at `x = 5.0`).
+For instance, consider the case where we want to evaluate the derivative of :math:`x^2+2x+1` evaluated at :math:`x = 5.0`.  This is achieved by first setting ``x = AD.AutoDiff(5.0)``, which automatically stores function and derivative values of :math:`x` evaluated at :math:`x = 5.0` (i.e. ``x.val`` = 5.0 and ``x.der`` = 1.0).  When we pass the desired expression (i.e. :math:`x^2+2x+1`) to Python, :math:`x` is raised to the power of 2, which is carried through `AutoDiff`'s ``__pow__`` method that returns a new `AutoDiff` object with the updated ``val`` and ``der`` values.  Specifically, the new returned object in this case has ``val`` = 25.0 and ``der`` = 10.0, which are the function and derivative values of :math:`x^2` evaluated at :math:`x = 5.0`.  A similar process occurs for the other operation steps (i.e. multiplication and addition), and we eventually obtain the `AutoDiff` object with the desired ``val`` and ``der`` values (i.e. function and derivative values of :math:`x^2+2x+1` evaluated at :math:`x = 5.0`).
 
 Central to this entire process is the `AutoDiff` class which is initiated by:
 
@@ -59,7 +59,7 @@ We can see that the method returns a new `AutoDiff` object with new updated `val
 
 Note that many methods in the `AutoDiff` class, such as `cos` and `exp`, rely on their counterparts in NumPy (e.g., `numpy.cos` and `numpy.exp`).  NumPy will play even more important role in our future development to support multiple functions of multiple inputs as NumPy arrays support fast and effective vectorized operations.
 
-The following code shows a deeper example of how our AutoDiff class is implemented and useful. Consider again the function, :math:`x^2+2x+1`. Suppose we want to use Newton's Method to find the root, using our package. Then we have:
+The following code shows a deeper example of how our `AutoDiff` class is implemented and useful. Consider again the function, :math:`x^2+2x+1`. Suppose we want to use Newton's Method to find the root, using our package. Then we have:
 
 .. code-block:: python
 
@@ -195,9 +195,9 @@ For the case where the input variables are arrays (instead of scalars), we are c
 
 AutoDiffExtended.py
 
-  - Contain additional functions to leverage the AutoDiff module for optimization problems (i.e. root-finding methods) and other extensions (i.e. hamiltonian monte carlo).
+  - This module will contain additional functions to leverage the `AutoDiff` module for optimization problems (e.g., root-finding methods) and other extensions (e.g., Hamiltonian Monte Carlo).
 
-  - We will possibly split this model to submodules.
+  - We will possibly split this module to submodules.
 
 **Demo Class**:
 

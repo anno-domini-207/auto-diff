@@ -8,7 +8,7 @@ import numpy as np
 class AutoDiff:
     def __init__(self, val=0.0, der=1.0):
         # When `val` is a list of `AutoDiff` objects (we assume/expect a list of homogeneous objects)
-        if isinstance(val, (list, np.ndarray)) and isinstance(val[0], AutoDiff):
+        if isinstance(val, list) and isinstance(val[0], AutoDiff):
             self.val = np.array([ad_obj.val for ad_obj in val])
             self.der = np.array([ad_obj.der for ad_obj in val])
         else:

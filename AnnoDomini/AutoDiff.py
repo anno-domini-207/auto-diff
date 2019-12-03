@@ -180,5 +180,5 @@ class AutoDiff:
 
     def logistic(self):
         val = 1 / (1 + np.exp(-self.val))
-        der = np.exp(self.val) / ((1 + np.exp(self.val)) ** 2)
+        der = np.exp(self.val) / ((1 + np.exp(self.val)) ** 2) * self.der
         return AutoDiff(val, der)

@@ -19,7 +19,7 @@ class AutoDiff:
         return f"====== Function Value(s) ======\n{self.val}\n===== Derivative Value(s) =====\n{self.der}\n"
 
     def __eq__(self, other):
-        return (self.val == other.val) and (self.der == other.der)
+        return np.array_equal(self.val, other.val) and np.array_equal(self.der, other.der)
 
     def __ne__(self, other):
         return (not self == other)

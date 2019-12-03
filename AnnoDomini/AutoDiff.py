@@ -7,11 +7,16 @@ import numpy as np
 
 class AutoDiff:
     def __init__(self, val=0.0, der=1.0):
-        self.val = val
-        self.der = der
+        # When `val` is a list of `AutoDiff` objects (we assume/expect a list of homogeneous objects)
+        if isinstance(val, (list, np.ndarray)) and isinstance(val[0], AutoDiff):
+            self.val = np.array([ad_obj.val for ad_obj in val])
+            self.der = np.array([ad_obj.der for ad_obj in val])
+        else:
+            self.val = np.array(val)
+            self.der = np.array(der)
 
     def __repr__(self):
-        return f"Function Value: {self.val} | Derivative Value: {self.der}"
+        return f"====== Function Value(s) ======\n{self.val}\n===== Derivative Value(s) =====\n{self.der}\n"
 
     def __eq__(self, other):
         return (self.val == other.val) and (self.der == other.der)

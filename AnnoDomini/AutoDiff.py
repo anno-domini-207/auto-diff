@@ -166,17 +166,15 @@ class AutoDiff:
         der = np.sinh(self.val) * self.der
         return AutoDiff(val, der)
 
-    def log(self):
+    def log(self, base=np.e):
         if self.val <= 0:
             raise ValueError("Domain error: Logarithm is defined for positive numbers only!")
-        val = np.log(self.val)
-        der = (1 / self.val) * self.der
+        val = np.math.log(self.val, base)
+        der = (1 / (np.log(base) * self.val)) * self.der
         return AutoDiff(val, der)
 
-    def exp(self):
-        val = np.exp(self.val)
-        der = np.exp(self.val) * self.der
-        return AutoDiff(val, der)
+    def exp(self, base=np.e):
+        return base**AutoDiff(self.val, self.der)
 
     def logistic(self):
         val = 1 / (1 + np.exp(-self.val))

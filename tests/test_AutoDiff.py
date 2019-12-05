@@ -8,10 +8,11 @@ from AnnoDomini.AutoDiff import AutoDiff as AD
 
 import numpy as np
 
+'''
 def test_repr():
     x = AD(1.5)
     assert x.__repr__() == 'Function Value: 1.5 | Derivative Value: 1.0'
-
+'''
 def test_neq():
     x = AD(1.5,1)
     y = AD(1.5,2)

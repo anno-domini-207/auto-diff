@@ -7,14 +7,19 @@ import numpy as np
 
 class AutoDiff:
     def __init__(self, val=0.0, der=1.0):
-        self.val = val
-        self.der = der
+        # When `val` is a list of `AutoDiff` objects (we assume/expect a list of homogeneous objects)
+        if isinstance(val, list) and isinstance(val[0], AutoDiff):
+            self.val = np.array([ad_obj.val for ad_obj in val])
+            self.der = np.array([ad_obj.der for ad_obj in val])
+        else:
+            self.val = np.array(val)
+            self.der = np.array(der)
 
     def __repr__(self):
-        return f"Function Value: {self.val} | Derivative Value: {self.der}"
+        return f"====== Function Value(s) ======\n{self.val}\n===== Derivative Value(s) =====\n{self.der}\n"
 
     def __eq__(self, other):
-        return (self.val == other.val) and (self.der == other.der)
+        return np.array_equal(self.val, other.val) and np.array_equal(self.der, other.der)
 
     def __ne__(self, other):
         return (not self == other)
@@ -161,19 +166,17 @@ class AutoDiff:
         der = np.sinh(self.val) * self.der
         return AutoDiff(val, der)
 
-    def log(self):
+    def log(self, base=np.e):
         if self.val <= 0:
             raise ValueError("Domain error: Logarithm is defined for positive numbers only!")
-        val = np.log(self.val)
-        der = (1 / self.val) * self.der
+        val = np.math.log(self.val, base)
+        der = (1 / (np.log(base) * self.val)) * self.der
         return AutoDiff(val, der)
 
-    def exp(self):
-        val = np.exp(self.val)
-        der = np.exp(self.val) * self.der
-        return AutoDiff(val, der)
+    def exp(self, base=np.e):
+        return base**AutoDiff(self.val, self.der)
 
     def logistic(self):
         val = 1 / (1 + np.exp(-self.val))
-        der = np.exp(self.val) / ((1 + np.exp(self.val)) ** 2)
+        der = np.exp(self.val) / ((1 + np.exp(self.val)) ** 2) * self.der
         return AutoDiff(val, der)

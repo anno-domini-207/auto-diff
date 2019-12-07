@@ -127,8 +127,10 @@ class AutoDiff:
     def tan(self):
         if ((self.val / np.pi) - 1 / 2) % 1 == 0:
             raise ValueError("Domain error: tangent is undefined at (1/2+k)*pi where k is any integer!")
+        '''not needed
         if np.cos(self.val) == 0:
             raise ZeroDivisionError
+        '''
         val = np.tan(self.val)
         der = ((1 / np.cos(self.val)) ** 2) * self.der
         return AutoDiff(val, der)
@@ -136,8 +138,10 @@ class AutoDiff:
     def arcsin(self):
         if not (-1 <= self.val <= 1):
             raise ValueError("Domain error: arcsin is defined at [-1, 1]!")
+        
         if np.abs(self.val) == 1:
             raise ZeroDivisionError
+    
         val = np.arcsin(self.val)
         der = (1 / np.sqrt(1 - (self.val ** 2))) * self.der
         return AutoDiff(val, der)

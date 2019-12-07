@@ -8,11 +8,17 @@ from AnnoDomini.AutoDiff import AutoDiff as AD
 
 import numpy as np
 
-'''
+
 def test_repr():
     x = AD(1.5)
-    assert x.__repr__() == 'Function Value: 1.5 | Derivative Value: 1.0'
-'''
+    assert x.__repr__() == '====== Function Value(s) ======\n1.5\n===== Derivative Value(s) =====\n1.0\n'
+    x = AD(2, [1,0])
+    y = AD(3, [0,1])
+    f = AD([x + y, x*y])
+    assert f.__repr__() == '====== Function Value(s) ======\n[5 6]\n===== Derivative Value(s) =====\n[[1 1]\n [3 2]]\n'
+    #assert x.__repr__() == 'Function Value: 1.5 | Derivative Value: 1.0'
+
+
 def test_neq():
     x = AD(1.5,1)
     y = AD(1.5,2)
@@ -225,6 +231,41 @@ def test_logistic():
     f = x.logistic()
     assert np.round(f.val,2) == np.round(loga,2)
     assert np.round(f.der, 2) == np.round(np.exp(a) / (np.exp(a)+1)**2, 2)
+    
+def test_r2_to_r1():
+    # f(x,y) = cos(x) + exp(y)
+    x = AD(np.pi/2, [1,0])
+    y = AD(1, [0,1])
+    f = np.cos(x) + np.exp(y)
+    assert np.round(f.val,2) == 2.72
+    assert len(f.der) == 2
+    assert np.round(f.der[0],2) == -1.0
+    assert np.round(f.der[1],2) == 2.72
 
+def test_r1_to_r2():
+    # f(x) = (x^2, sin(x))
+    x = AD(np.pi/2, 1)
+    f = AD([x**2, np.sin(x)])
+    assert len(f.val) == 2
+    assert np.round(f.val[0], 2) == 2.47
+    assert np.round(f.val[1], 2) == 1.00
+    assert len(f.der) == 2
+    assert np.round(f.der[0], 2) == 3.14
+    assert np.round(f.der[1], 2) == 0
+
+def test_r2_to_r2():
+    # f(x,y) = (x + y, x * y)
+    x = AD(2, [1,0])
+    y = AD(3, [0,1])
+    f = AD([x + y, x*y])
+    assert len(f.val) == 2
+    assert (f.val == np.array([5,6])).all()
+    assert (f.der == np.array([[1,1],[3,2]])).all()
+    
+
+#test_rm_to_r1()
+#test_r1_to_rn()
+#test_r2_to_r2()
+#test_repr()
 
 

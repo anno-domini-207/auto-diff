@@ -70,6 +70,17 @@ We can access only the value or derivative component as follows:
     >>> print(z.der)
     5.0
 
+Other elementary functions can be used in the same way.  For instance, we may evaluate the derivative of :math:`log_{2}(x)+arctan(3x+5)` at :math:`x = 10.0` as follows:
+
+.. code-block:: python
+    >>> x = AutoDiff(10.0)
+    >>> z = x.log(2) + np.arctan(3 * x + 5)
+    >>> print(z)
+    ====== Function Value(s) ======
+    4.864160763843499
+    ===== Derivative Value(s) =====
+    0.14671648614436125
+
 2. Multiple Variables, Single Function
 
 Consider the case where the user would like to input the function,

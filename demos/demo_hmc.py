@@ -5,9 +5,14 @@ Created on Sun Dec  8 20:37:19 2019
 @author: for_y
 """
 
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import matplotlib.pyplot as plt
 import numpy as np
-from AnnoDomini.hamilton_mc import HMC
+from AnnoDomini.hamilton_mc import HMC, describe
 
 def demo_normal():
     def norm_function(mu = 0, var = 1):
@@ -85,7 +90,24 @@ def demo_weibull():
     ax.legend()
     plt.savefig('hmc_simulation_weibull_1_15.png')
 
-demo_normal()
-demo_weibull()
+def demo_describe():
+    def norm_function(mu = 0, var = 1):
+        def norm(x):
+            denom = (2*np.pi*var)**.5
+            num = np.exp(-(x-mu)**2/(2*var))
+            return num/denom
+        return norm
+    
+    start_point = 1 
+    func = norm_function(1, 0.1)
+    d = describe(func, start_point = start_point, burn_in = 200, epsilon = 0.05)
+    print("Mean = {}".format(d['mean'])) # 1
+    print("Var = {}".format(d['var'])) # 0.1
+    print("quantiles(25%, 75%) = {}".format(d['quantiles']))
+
+
+#demo_normal()
+#demo_weibull()
+#demo_describe()
 
 

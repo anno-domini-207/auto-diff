@@ -63,14 +63,14 @@ def HMC(q_init, target_pdf = None, D = None, U = None,
             
             if isinstance(dU, AD.AutoDiff):
                 p_half = p_prev - epsilon/2 * dU.der
-            else:
+            else:#pragma: no cover
                 p_half = p_prev - epsilon/2 * dU
                 
             q_propose = q_prev + epsilon * p_prev
             dU = U(AD.AutoDiff(q_propose))
             if isinstance(dU, AD.AutoDiff):
                 p_propose = p_half - epsilon/2 * dU.der
-            else:
+            else:#pragma: no cover
                 p_propose = p_half - epsilon/2 * dU
             
             q_prev, p_prev = q_propose, p_propose
@@ -89,6 +89,22 @@ def HMC(q_init, target_pdf = None, D = None, U = None,
     temp = np.array(output)
     return temp[burn_in::thinning], accepts * 1. / chain_len
 
+def describe(target_pdf = None, U = None, start_point = None, burn_in = 0, chain_len = 10000, epsilon = 0.05):#pragma: no cover
+    if target_pdf:
+        chain,accepts_ratio = HMC(target_pdf = target_pdf, burn_in=burn_in, thinning=1,chain_len=chain_len, q_init=[start_point],epsilon = epsilon)
+    if U:
+        chain,accepts_ratio = HMC(U = U, burn_in=burn_in, thinning=1,chain_len=chain_len, q_init=[start_point],epsilon = epsilon)
+    print("Accepts ratio = {}".format(accepts_ratio))
+    q = chain[:,0]
+    mean = np.mean(q)
+    var = np.var(q)
+    quantiles = np.percentile(q, [25, 75])
+    d = {}
+    d['mean'] = mean
+    d['var'] = var
+    d['quantiles'] = quantiles
+    return d
+
 if __name__ == '__main__':#pragma: no cover
     import matplotlib.pyplot as plt
     def norm_function(x):
@@ -96,6 +112,7 @@ if __name__ == '__main__':#pragma: no cover
         denom = (2*np.pi*var)**.5
         num = np.exp(-x**2/2)
         return num/denom
+    
     
     start_point = -10.0 # start from far apart
     chain,accepts_ratio = HMC(target_pdf = norm_function, burn_in=200, thinning=2,chain_len=10000, q_init=[start_point],epsilon = 0.05)
@@ -109,4 +126,7 @@ if __name__ == '__main__':#pragma: no cover
     ax.hist(q,bins = 50, density = True, color = "blue",alpha = 0.3, label = "histogram of samples")
     ax.set_title("Actual pdf vs sampling by hamiltonian monte carlo")
     ax.legend()
+    
+    
+    print(describe(target_pdf=norm_function))
     #plt.savefig('hmc_simulation.png')

@@ -6,7 +6,7 @@ Created on Sun Dec  8 22:37:00 2019
 """
 
 import numpy as np
-from AnnoDomini.hamilton_mc import HMC
+from AnnoDomini.hamilton_mc import HMC, describe
 import sys
 import os
 
@@ -25,6 +25,7 @@ def test_hmc():
     q = chain[:,0]
     assert max(q) < 10
     assert np.isnan(q).sum() == 0
+    
     
     def neg_log_weibull(lam = 1, k = 0.5):
         def w(x):

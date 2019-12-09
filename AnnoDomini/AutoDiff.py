@@ -19,7 +19,30 @@ class AutoDiff:
         return f"====== Function Value(s) ======\n{self.val}\n===== Derivative Value(s) =====\n{self.der}\n"
 
     def __eq__(self, other):
-        return np.array_equal(self.val, other.val) and np.array_equal(self.der, other.der)
+        try:
+            np.array_equal(self.val, other.val) and np.array_equal(self.der, other.der)
+        except:
+            if len(self.val) == 1 and np.array_equal(self.der, [1.]):
+            	return self.val == other
+            return False
+    
+    def __lt__(self,other):
+        try:
+            return self.val < other.val
+        except:
+            return self.val < other
+    
+    def __le__(self, other):
+        return self.__lt__(other) or self.__eq__(other)
+    
+    def __gt__(self, other):
+        try:
+            return self.val > other.val
+        except:
+            return self.val > other
+        
+    def __ge__(self, other):
+        return self.__gt__(other) or self.__eq__(other)
 
     def __ne__(self, other):
         return (not self == other)
@@ -110,6 +133,8 @@ class AutoDiff:
         val = -self.val
         der = -self.der
         return AutoDiff(val, der)
+    
+        
 
     def sqrt(self):
         return AutoDiff(self.val, self.der) ** 0.5

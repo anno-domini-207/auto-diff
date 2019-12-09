@@ -1,4 +1,4 @@
-How to use Anno Domini
+How to use ``Anno Domini``
 =======================================
 
 How to Install
@@ -7,7 +7,6 @@ How to Install
 **Internal Note: How to Publish to Pip**
 
 .. code-block:: bash
-
 
     $ python setup.py sdist
     $ twine upload dist/*
@@ -37,12 +36,13 @@ How to Install
     >>> quit()
     $ deactivate
 
-*Note*: Numpy and Pytest are also required. If they are missing an error message will indicate as much.
+.. note:: Numpy and Pytest are also required. If they are missing an error message will indicate as much.
 
 How to Use
 ----------
 
-1. Single Variable, Single Function
+1. Single Variable, Single Function (:math:`\mathbb{R}^1 \rightarrow \mathbb{R}^1`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Suppose we want to to find the derivative of :math:`x^2+2x+1`. We can the utilize the AnnoDomini package as follows:
 
@@ -73,7 +73,8 @@ We can access only the value or derivative component as follows:
 Other elementary functions can be used in the same way.  For instance, we may evaluate the derivative of :math:`log_{2}(x)+arctan(3x+5)` at :math:`x = 10.0` as follows:
 
 .. code-block:: python
-    >>> x = AutoDiff(10.0)
+
+    >>> x = AD.AutoDiff(10.0)
     >>> z = x.log(2) + np.arctan(3 * x + 5)
     >>> print(z)
     ====== Function Value(s) ======
@@ -81,7 +82,10 @@ Other elementary functions can be used in the same way.  For instance, we may ev
     ===== Derivative Value(s) =====
     0.14671648614436125
 
-2. Multiple Variables, Single Function
+.. note:: for the single variable, we don't need to put the scaler number to the list. The AutoDiff class is smart enough to handle this case.
+
+2. Multiple Variables, Single Function (:math:`\mathbb{R}^m \rightarrow \mathbb{R}^1`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Consider the case where the user would like to input the function,
 :math:`f = xy`. Then, the derivative of this would be represented in a Jacobian matrix,
@@ -98,7 +102,8 @@ Consider the case where the user would like to input the function,
     ===== Derivative Value(s) =====
     [2. 3.]
 
-3. Single Variable, Multiple Functions
+3. Single Variable, Multiple Functions (:math:`\mathbb{R}^1 \rightarrow \mathbb{R}^n`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Consider the case where the user would like to input the two functions,
 :math:`F = [x^2, 2x]`. Then, the derivative of this would be represented in a Jacobian matrix,
@@ -114,7 +119,8 @@ Consider the case where the user would like to input the two functions,
     ===== Derivative Value(s) =====
     [6. 2.]
 
-4. Multiple Variables, Multiple Functions
+4. Multiple Variables, Multiple Functions (:math:`\mathbb{R}^m \rightarrow \mathbb{R}^n`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Consider the case where the user would like to input the two functions,
 :math:`F = [x+y, xy]`. Then, the derivative of this would be represented in a Jacobian matrix,

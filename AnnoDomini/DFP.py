@@ -8,7 +8,7 @@ import AnnoDomini.AutoDiff as AD
 import numpy as np
 
 
-class DPF:
+class DFP:
     def __init__(self, f, x0, niter=20000, tol=10 ** (-8)):
         self.f = f
         self.vars = []
@@ -18,7 +18,7 @@ class DPF:
             guesses[i] = 1
             self.vars.append(AD.AutoDiff(variable, guesses))
         self.vars = f(self.vars)
-        self.Bk = np.eye(x0.shape[0])
+        self.Bk = np.eye(np.shape(x0)[0])
         self.xk = x0  # x0 = (n,1) vector
         self.xk1 = x0
         self.tol = tol
@@ -43,7 +43,7 @@ class DPF:
         t5 = np.dot(t3, t4)
         self.Bk = t5 + gamma * t1
 
-    def dpf(self):
+    def find_root(self):
         count = 0
         while count < self.niter:
             self.xs.append(self.xk)

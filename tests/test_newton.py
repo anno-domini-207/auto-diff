@@ -6,7 +6,8 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../A
 
 #from AnnoDomini.AutoDiff import AutoDiff as AD
 from AnnoDomini.AutoDiff import AutoDiff as AD
-from newtons_method import Newton
+from AnnoDomini.newtons_method import Newton
+import numpy as np
 
 def test_newton():
     x0 = -3
@@ -14,4 +15,4 @@ def test_newton():
     demo = Newton(f,x0)
     root_est = demo.find_root()
     real_root = -1
-    assert real_root == root_est
+    assert np.round(real_root,2) == np.round(root_est,2)

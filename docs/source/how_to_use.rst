@@ -38,8 +38,8 @@ How to Install
 
 .. note:: Numpy and Pytest are also required. If they are missing an error message will indicate as much.
 
-How to Use
-----------
+Basic Demos
+------------
 
 1. Single Variable, Single Function (:math:`\mathbb{R}^1 \rightarrow \mathbb{R}^1`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

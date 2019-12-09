@@ -19,7 +19,7 @@ class AutoDiff:
 
     def __eq__(self, other):
         try:
-            np.array_equal(self.val, other.val) and np.array_equal(self.der, other.der)
+            return np.array_equal(self.val, other.val) and np.array_equal(self.der, other.der)
         except:
             if len(self.val) == 1 and np.array_equal(self.der, [1.]):
             	return self.val == other

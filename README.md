@@ -5,7 +5,6 @@ Anno Domini is equivalent to Automatic Differentiation because they have the sam
 
 ## Quick Start
 
-
 ### Installation
 ```
 $ pip install virtualenv  # If Necessary
@@ -78,13 +77,16 @@ $ deactivate
  [2. 3.]]
 ```
 
+## More Resources
+
 **Documentation: [https://cs207-finalproject-group15.readthedocs.io/en/latest/](https://cs207-finalproject-group15.readthedocs.io/en/latest/)**
 
 **PyPI: [https://pypi.org/project/AnnoDomini/](https://pypi.org/project/AnnoDomini/)**
 
-CS207 Group 15 Team Members: 
 
-- Simon Warchol 
-- Kaela Nelson 
+## Authors (CS207 Group 15):
+
+- Simon Warchol
+- Kaela Nelson
 - Qiuyang Yin
 - Sangyoon Park

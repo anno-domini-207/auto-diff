@@ -74,12 +74,6 @@ def HMC(q_init, target_pdf = None, D = None, U = None,
             else:
                 p_propose = p_half - epsilon/2 * dU
             
-            
-            if np.sum(np.isnan(*q_propose))>0 or np.sum(np.isnan(p_propose))>0:
-                #print(q_propose,p_propose)
-                print("overflow error!")
-                return -1,-1
-            
             q_prev, p_prev = q_propose, p_propose
         
         # reverse momentum

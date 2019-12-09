@@ -35,10 +35,10 @@ Our implementation works for scalar input, :math:`x_0` and single functions. Thi
     $ virtualenv venv
     $ source venv/bin/activate
     $ pip install numpy
+    $ pip install scipy
     $ pip install AnnoDomini
     $ python
-    >>> import AnnoDomini.AutoDiff as AD
-    >>> from newtons_method import Newton
+    >>> from AnnoDomini.newtons_method import *
     >>> import numpy as np
     >>> from scipy import linalg as la
     >>> f = lambda x: np.sin(x) + x * np.cos(x)
@@ -72,10 +72,10 @@ Our method works for both single and multivariable inputs, and single output fun
     $ virtualenv venv
     $ source venv/bin/activate
     $ pip install numpy
+    $ pip install scipy
     $ pip install AnnoDomini
     $ python
-    >>> import AnnoDomini.AutoDiff as AD
-    >>> from steepest_descent import SteepestDescent
+    >>> from AnnoDomini.steepest_descent import *
     >>> import numpy as np
     >>> from scipy import linalg as la
     >>> def f(args):
@@ -113,10 +113,10 @@ This method can be implemented as follows:
     $ virtualenv venv
     $ source venv/bin/activate
     $ pip install numpy
+    $ pip install scipy
     $ pip install AnnoDomini
     $ python
-    >>> import AnnoDomini.AutoDiff as AD
-    >>> from BFGS import BFGS
+    >>> from AnnoDomini.BFGS import *
     >>> import numpy as np
     >>> from scipy import linalg as la
     >>> def f(args):
@@ -155,10 +155,10 @@ This method can be implemented as follows:
     $ virtualenv venv
     $ source venv/bin/activate
     $ pip install numpy
+    $ pip install scipy
     $ pip install AnnoDomini
     $ python
-    >>> import AnnoDomini.AutoDiff as AD
-    >>> from BFGS import BFGS
+    >>> from AnnoDomini.DFP import *
     >>> import numpy as np
     >>> from scipy import linalg as la
     >>> def f(args):

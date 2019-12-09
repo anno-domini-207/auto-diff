@@ -30,7 +30,7 @@ def plot_bfgs(ans):
     Z = f(np.array([X, Y]))
     xmesh, ymesh = np.mgrid[-4:4:80j, -4:4:80j]
     fmesh = f(np.array([xmesh, ymesh]))
-    fig = plt.figure()
+    fig = plt.subplots(1,1, figsize = (10,7))
     plt.title('BFGS Path for Rosenbrock’s Function, Starting at [2,1]')
     plt.xlim(-4, 4)
     plt.ylim(-4, 4)
@@ -42,7 +42,7 @@ def plot_bfgs(ans):
     plt.plot(it_array.T[0][-1], it_array.T[1][-1], 'xg', label='Solution', markersize=12)
 
     plt.legend()
-    plt.show()
-
+    #plt.show()
+    plt.savefig("BFGS.png")
 
 plot_bfgs(traj)

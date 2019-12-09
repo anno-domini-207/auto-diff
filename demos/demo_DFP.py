@@ -27,7 +27,7 @@ def plot_dfp(ans):
     Z = f(np.array([X, Y]))
     xmesh, ymesh = np.mgrid[-4:4:80j, -4:4:80j]
     fmesh = f(np.array([xmesh, ymesh]))
-    fig = plt.figure()
+    fig = plt.subplots(1,1, figsize = (10,7))
     plt.title('DPF Path for $f(x,y) = e^{x+1} + e^{1-y} + {(x-y)}^2$ Starting at [2,0]')
     plt.xlim(-4, 4)
     plt.ylim(-4, 4)
@@ -38,7 +38,8 @@ def plot_dfp(ans):
     plt.plot(it_array.T[0][0], it_array.T[1][0], 'xr', label='Initial Guess', markersize=12)
     plt.plot(it_array.T[0][-1], it_array.T[1][-1], 'xg', label='Solution', markersize=12)
     plt.legend()
-    plt.show()
+    #plt.show()
+    plt.savefig("DFP.png")
 
 
 plot_dfp(traj)

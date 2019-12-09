@@ -30,6 +30,7 @@ traj2 = np.concatenate((np.array(x).reshape(-1,1),np.array(y).reshape(-1,1)), ax
 def plot_descent(ans):
     X, Y = np.meshgrid(np.linspace(-3, 3, 100), np.linspace(-2, 8, 100))
     Z = f(np.array([X,Y]))
+    fig = plt.subplots(1,1, figsize = (10,7))
     plt.contour(X, Y, Z)
     plt.plot(ans[:,0], ans[:,1], "-.", label="Trajectory")
     plt.scatter(root[0],root[1], label="Root", c="red")
@@ -38,6 +39,7 @@ def plot_descent(ans):
     plt.xlim(-3, 3)
     plt.ylim(-2, 8)
     plt.legend()
-    plt.show()
+    #plt.show()
+    plt.savefig("steepestDescent.png")
 
 plot_descent(traj2)

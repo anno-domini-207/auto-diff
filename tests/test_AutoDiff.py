@@ -18,11 +18,45 @@ def test_repr():
     assert f.__repr__() == '====== Function Value(s) ======\n[5 6]\n===== Derivative Value(s) =====\n[[1 1]\n [3 2]]\n'
     #assert x.__repr__() == 'Function Value: 1.5 | Derivative Value: 1.0'
 
-
-def test_neq():
+def test_eq():
+    x = AD(1.5,1)
+    assert x == 1.5
+    x = AD(2, [3,2])
+    y = AD(2, [3,2])
+    assert x == y
+    
+def test_ne():
     x = AD(1.5,1)
     y = AD(1.5,2)
     assert x != y
+    assert x != 2
+
+def test_lt():
+    x = AD(2)
+    y = AD(3)
+    assert x < y
+    assert x < 10 and y < 10
+
+def test_le():
+    x = AD(2)
+    y = AD(3)
+    assert x <= 2
+    assert x <= y
+    assert y <= 3
+    
+def test_gt():
+    x = AD(2)
+    y = AD(3)
+    assert x > 0
+    assert y > 0
+    assert y > x
+
+def test_ge():
+    x = AD(2)
+    y = AD(3)
+    assert x>=2
+    assert y>=2
+    assert y>=x
     
 def test_negative():
     x = AD(10)
@@ -210,6 +244,12 @@ def test_cosh():
     assert np.round(f.val, 2) == 1.13
     assert np.round(f.der, 2) == 0.52
 
+def test_tanh():
+    x = AD(0.5)
+    f = np.tanh(x)
+    assert np.round(f.val, 2) == np.round(np.tanh(0.5),2)
+    assert np.round(f.der, 2) == np.round(1/(np.cosh(0.5) ** 2), 2)
+
 def test_log():
     x = AD(-1)
     with np.testing.assert_raises(ValueError):
@@ -261,6 +301,7 @@ def test_r2_to_r2():
     assert len(f.val) == 2
     assert (f.val == np.array([5,6])).all()
     assert (f.der == np.array([[1,1],[3,2]])).all()
+
     
 
 #test_rm_to_r1()

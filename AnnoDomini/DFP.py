@@ -2,17 +2,14 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../Optimization')))
 
 from numpy import linalg as la
 import AnnoDomini.AutoDiff as AD
 import numpy as np
-import numpy
-
 
 
 class DPF:
-    def __init__(self, f, x0, niter=2000, tol=10 ** (-8)):
+    def __init__(self, f, x0, niter=20000, tol=10 ** (-8)):
         self.f = f
         self.vars = []
         variables = enumerate(x0)
@@ -25,7 +22,9 @@ class DPF:
         self.xk = x0  # x0 = (n,1) vector
         self.xk1 = x0
         self.tol = tol
+        self.count = 0;
         self.niter = niter
+        self.xs = []
 
     def check_convergence(self):
         if la.norm(self.xk1 - self.xk) < self.tol:
@@ -37,22 +36,17 @@ class DPF:
         I = (np.eye(yk.shape[0]))
         t1 = np.outer(yk, yk.T)
         b1 = np.dot(yk.T, sk)
-        # b1 = 1 / np.dot(yk.T, sk)
         gamma = 1 / b1
-
-        t2 = I - gamma*(np.outer(yk, sk.T))
-        # print(yk.shape, sk.shape, gamma.shape)
-        # print(self.Bk.shape, b1)
-
+        t2 = I - gamma * (np.outer(yk, sk.T))
         t3 = np.dot(t2, self.Bk)
-        t4 = I - gamma*(np.outer(sk, yk.T))
-        # print(t4.shape)
+        t4 = I - gamma * (np.outer(sk, yk.T))
         t5 = np.dot(t3, t4)
-        self.Bk = t5 + gamma*t1
+        self.Bk = t5 + gamma * t1
 
     def dpf(self):
         count = 0
         while count < self.niter:
+            self.xs.append(self.xk)
             count = count + 1
             gradient = self.vars.der
             sk = la.solve(-self.Bk, gradient)
@@ -63,7 +57,7 @@ class DPF:
                 guesses = np.zeros(len(self.xk1))
                 guesses[i] = 1
                 new_vars_list.append(AD.AutoDiff(variable, guesses))
-            new_vars_list = f(new_vars_list)
+            new_vars_list = self.f(new_vars_list)
             yk = new_vars_list.der - gradient
             if self.check_convergence():
                 break
@@ -71,15 +65,5 @@ class DPF:
             # break
             self.xk = self.xk1
             self.vars = new_vars_list
-        print(count)
+        self.count = count
         return self.xk
-
-
-def f(args):
-    [x, y] = args
-    return 100 * (y - x ** 2) ** 2 + (1 - x) ** 2
-
-
-test = DPF(f, np.array([-1, 1])).dpf()
-
-print(test)

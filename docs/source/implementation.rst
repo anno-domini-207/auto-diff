@@ -8,6 +8,7 @@ For instance, consider the case where we want to evaluate the derivative of :mat
 The `AutoDiff` class has its own methods that define its behavior for common elementary functions such as addition and multiplication.  Specifically, the class has the following methods implemented:
 
 ::
+
     __add__
     __radd__
     __sub__

@@ -73,6 +73,7 @@ We can access only the value or derivative component as follows:
 Other elementary functions can be used in the same way.  For instance, we may evaluate the derivative of :math:`log_{2}(x)+arctan(3x+5)` at :math:`x = 10.0` as follows:
 
 .. code-block:: python
+
     >>> x = AutoDiff(10.0)
     >>> z = x.log(2) + np.arctan(3 * x + 5)
     >>> print(z)

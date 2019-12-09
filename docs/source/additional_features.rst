@@ -15,3 +15,5 @@ Steepest descend
 
 Hamiltonian Monte Carlo (HMC)
 -----------------------------
+
+

@@ -1,6 +1,5 @@
 # The AutoDiff class implements methods for (automatically) calculating derivatives of elementary functions.
-# As of now (11/15/2019), the implementation is intended and works only for scalar functions of a single input,
-# but the functionality will be expanded in coming weeks to support multiple functions of multiple inputs.
+# The class supports automatic differentiation of vector functions with multiple real scalar inputs.
 
 import numpy as np
 
@@ -19,7 +18,30 @@ class AutoDiff:
         return f"====== Function Value(s) ======\n{self.val}\n===== Derivative Value(s) =====\n{self.der}\n"
 
     def __eq__(self, other):
-        return np.array_equal(self.val, other.val) and np.array_equal(self.der, other.der)
+        try:
+            return np.array_equal(self.val, other.val) and np.array_equal(self.der, other.der)
+        except:
+            if len(self.val) == 1 and np.array_equal(self.der, [1.]):
+            	return self.val == other
+            return False
+    
+    def __lt__(self,other):
+        try:
+            return self.val < other.val
+        except:
+            return self.val < other
+    
+    def __le__(self, other):
+        return self.__lt__(other) or self.__eq__(other)
+    
+    def __gt__(self, other):
+        try:
+            return self.val > other.val
+        except:
+            return self.val > other
+        
+    def __ge__(self, other):
+        return self.__gt__(other) or self.__eq__(other)
 
     def __ne__(self, other):
         return (not self == other)
@@ -110,6 +132,8 @@ class AutoDiff:
         val = -self.val
         der = -self.der
         return AutoDiff(val, der)
+    
+        
 
     def sqrt(self):
         return AutoDiff(self.val, self.der) ** 0.5
@@ -168,6 +192,13 @@ class AutoDiff:
     def cosh(self):
         val = np.cosh(self.val)
         der = np.sinh(self.val) * self.der
+        return AutoDiff(val, der)
+
+    def tanh(self):
+        if np.cosh(self.val) == 0:
+            raise ZeroDivisionError
+        val = np.tanh(self.val)
+        der = (1 / (np.cosh(self.val) ** 2)) * self.der
         return AutoDiff(val, der)
 
     def log(self, base=np.e):

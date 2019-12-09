@@ -3,23 +3,20 @@ Additional features
 
 Our package comes with a library package containing the following methods:
 
-- Hamiltonian Monte Carlo
 - Newton's Root Finding
 - Steepest Descent
-- BFGS
-- DFP
+- Broyden–Fletcher–Goldfarb–Shanno (BFGS)
+- Davidon–Fletcher–Powell formula (DFP)
+- Hamiltonian Monte Carlo(HMC)
 
-All of these methods' implementations use our AnnoDomini package to solve for the gradients within the methods. We include demos
-of each method in the directory, demos.
+All of these methods' implementations use our AnnoDomini package to solve for the gradients within the methods. We include demos of each method in the directory, demos.
 
 A more detailed description of each method is provided below:
 
-Hamiltonian Monte Carlo
-~~~~~~~~~~~~~~~~~~~~~~~
-
 Newton's Root Finding
-~~~~~~~~~~~~~~~~~~~~~~~
-Newton's root finding algorithm is a useful approach to finding the root(s) of functions that are difficult to solve for analytically, i.e. :math:`log(2x) + arctan(3 * x + 5)`.
+----------------------
+
+Newton's root finding algorithm is a useful approach to finding the root(s) of functions that are difficult to solve for analytically, i.e. :math:`log(2x) + arctan(3x + 5)`.
 Mathematically, the algorithm is given by
 
 :math:`x_{n+1} = x_n - \frac{f(x_n)}{\prime{f(x_n)}}`
@@ -29,16 +26,9 @@ A useful resource is found `here <http://tutorial.math.lamar.edu/Classes/CalcI/N
 
 Our implementation works for scalar input, :math:`x_0` and single functions. This method can be implemented as follows:
 
-.. code-block:: bash
+.. code-block:: python
 
-    $ pip install virtualenv # If Necessary
-    $ virtualenv venv
-    $ source venv/bin/activate
-    $ pip install numpy
-    $ pip install scipy
-    $ pip install AnnoDomini
-    $ python
-    >>> from AnnoDomini.newtons_method import *
+    >>> from AnnoDomini.newtons_method import Newton
     >>> import numpy as np
     >>> from scipy import linalg as la
     >>> f = lambda x: np.sin(x) + x * np.cos(x)
@@ -50,11 +40,33 @@ Our implementation works for scalar input, :math:`x_0` and single functions. Thi
     >>> quit()
     $ deactivate
 
+And then we can do the visulization:
+
+.. code-block:: python
+	
+	from matplotlib import pyplot as plt
+	xs = np.linspace(-7,5,100)
+	plt.plot(xs, f(xs), label="f")
+	plt.scatter(root, f(root),label="Root", color = 'black')
+	plt.scatter(x0, f(x0),label="initial", color = 'red')
+	plt.xlabel("x")
+	plt.ylabel("y")
+	plt.title("Visual of Newton's Method on $sin(x) + x * cos(x)$")
+	plt.axhline(y = 0, color = 'red')
+	plt.legend()
+	plt.show()
+
+.. figure:: newtons_method.png
+    :width: 2000px
+    :align: center
+    :height: 500px
+    :alt: alternate text
+    :figclass: align-center
+	
 A full demo of this method is available in the demos subdirectory.
 
-
 Steepest Descent
-~~~~~~~~~~~~~~~~
+----------------
 
 Steepest Descent is an unconstrained optimization algorithm used to find the minima/maxima for a specified function. It achieves this by iteratively following the direction of the negative gradient at every step. We determine the optimal step size by following the line-search approach: evaluate the function over a range of possible stepsizes and choosing the minimum value.
 Mathematically, the algorithm is give by
@@ -66,15 +78,8 @@ Mathematically, the algorithm is give by
 
 Our method works for both single and multivariable inputs, and single output functions. The user must input a function that accounts for specified number of variables desired. This method can be implemented as follows:
 
-.. code-block:: bash
+.. code-block:: python
 
-    $ pip install virtualenv # If Necessary
-    $ virtualenv venv
-    $ source venv/bin/activate
-    $ pip install numpy
-    $ pip install scipy
-    $ pip install AnnoDomini
-    $ python
     >>> from AnnoDomini.steepest_descent import *
     >>> import numpy as np
     >>> from scipy import linalg as la
@@ -93,8 +98,9 @@ Our method works for both single and multivariable inputs, and single output fun
 A full demo of this method is available in the demos subdirectory.
 
 
-BFGS
-~~~~
+Broyden–Fletcher–Goldfarb–Shanno (BFGS)
+---------------------------------------
+
 BFGS, or the Broyden–Fletcher–Goldfarb–Shanno algorithm, is a
 first-order quasi-Newton optimization method, which approximates the Hessian matrix with the gradient and direction of a function.
 The algorithm is as follows, in terms of the Approximate Hessian, :math:`B_k`, the step  :math:`s_k`, and :math:`y_k`
@@ -135,8 +141,9 @@ This method can be implemented as follows:
 A full demo of this method is available in the demos subdirectory.
 
 
-DFP
-~~~
+Davidon–Fletcher–Powell formula (DFP)
+-------------------------------------
+
 DFP, or the Davidon–Fletcher–Powell formula, is another
 first-order quasi-Newton optimization method, which also approximates the Hessian matrix with the gradient and direction of a function.
 The algorithm is as follows, in terms of the Approximate Hessian, :math:`B_k`, the step  :math:`s_k`, :math:`\gamma_k  = \frac{1}{y_k^T s_k}`
@@ -177,5 +184,7 @@ A full demo of this method is available in the demos subdirectory.
 
 
 =======
-**Note:**  DFP is empirically significantly less performant than BFPS. For instance, it may take up to 1 million iterations to converge on the Rosenbrock function.
->>>>>>> 7f228a40f8410687d6da6d9538c22729c76b62b7
+.. note::  DFP is empirically significantly less performant than BFPS. For instance, it may take up to 1 million iterations to converge on the Rosenbrock function.
+
+Hamiltonian Monte Carlo
+-----------------------

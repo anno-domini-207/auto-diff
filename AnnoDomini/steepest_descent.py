@@ -20,7 +20,7 @@ class SteepestDescent:
             guesses = np.zeros(len(x0))
             guesses[i] = 1
             self.vars.append(AD.AutoDiff(variable, guesses))
-        self.vars = f(self.vars)
+        self.vars = self.f(self.vars)
 
     def update_xk(self):
         self.xk1 = self.xk - self.step*self.vars.der
@@ -30,7 +30,7 @@ class SteepestDescent:
             guesses = np.zeros(len(self.xk1))
             guesses[i] = 1
             new_vars_list.append(AD.AutoDiff(variable, guesses))
-        new_vars_list = f(new_vars_list)
+        new_vars_list = self.f(new_vars_list)
 
         self.xk = self.xk1
         self.vars = new_vars_list
@@ -40,19 +40,19 @@ class SteepestDescent:
         while self.step > self.tol and i <= self.maxiter:
             sk = self.vars.der
             dif = self.xk - self.step*sk
-            dif_f = f(dif)
-            if dif_f < f(self.xk):
+            dif_f = self.f(dif)
+            if dif_f < self.f(self.xk):
                 # print("here")
                 self.update_xk()
             else:
                 self.step = self.step/2.
         return self.xk1
 
-def f(args):
-    [x,y] = args
-    ans = 100*(y-x**2)**2 + (1-x)**2
-    return ans
-
-x0 = [0,1]
-sd = SteepestDescent(f, x0)
-print(sd.find_root())
+# def f(args):
+#     [x,y] = args
+#     ans = 100*(y-x**2)**2 + (1-x)**2
+#     return ans
+#
+# x0 = [0,1]
+# sd = SteepestDescent(f, x0)
+# print(sd.find_root())

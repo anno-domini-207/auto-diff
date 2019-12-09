@@ -34,17 +34,17 @@ class SteepestDescent:
 
         self.xk = self.xk1
         self.vars = new_vars_list
+        self.xs.append(self.xk1)
 
     def find_root(self):
         i = 0
-        self.xs = [self.xk]
+        self.xs = [np.array(self.xk)]
         while self.step > self.tol and i <= self.maxiter:
             sk = self.vars.der
             dif = self.xk - self.step*sk
             dif_f = self.f(dif)
             if dif_f < self.f(self.xk):
                 # print("here")
-                self.xs.append(self.xk1)
                 self.update_xk()
             else:
                 self.step = self.step/2.

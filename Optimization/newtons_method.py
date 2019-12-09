@@ -1,5 +1,11 @@
-from numpy import linalg as la
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import AnnoDomini.AutoDiff as AD
+import numpy as np
+from scipy import linalg as la
 
 '''Note: So far, this is Newton for scara inputs, and we have to adjust for the different
 number of input and output types, and multivariable case.'''
@@ -21,10 +27,10 @@ class Newton:
             return False
 
     def update_x(self,df):
-        self.xnew = self.xold - self.alpha * self.f(xold)/ self.f(df).der
+        self.xnew = self.xold - self.alpha * self.f(self.xold)/ self.f(df).der
 
-    def scalar_newton(self):
-        for i in range self.maxiter:
+    def find_root(self):
+        for i in range(self.maxiter):
             df = AD.AutoDiff(self.xold)
             self.update_x(df)
             if self.check_convergence():

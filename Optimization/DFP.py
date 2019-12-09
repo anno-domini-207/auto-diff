@@ -1,7 +1,14 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../Optimization')))
+
 from numpy import linalg as la
 import AnnoDomini.AutoDiff as AD
 import numpy as np
 import numpy
+
 
 
 class DPF:
@@ -29,14 +36,19 @@ class DPF:
     def update_B(self, yk, sk):
         I = (np.eye(yk.shape[0]))
         t1 = np.outer(yk, yk.T)
-        b1 = 1 / np.dot(yk.T, sk)
+        b1 = np.dot(yk.T, sk)
+        # b1 = 1 / np.dot(yk.T, sk)
         gamma = 1 / b1
 
-        t2 = I - np.dot((np.outer(yk, sk.T)), gamma)
+        t2 = I - gamma*(np.outer(yk, sk.T))
+        # print(yk.shape, sk.shape, gamma.shape)
+        # print(self.Bk.shape, b1)
+
         t3 = np.dot(t2, self.Bk)
-        t4 = I - np.dot((np.outer(sk, yk.T)), gamma)
+        t4 = I - gamma*(np.outer(sk, yk.T))
+        # print(t4.shape)
         t5 = np.dot(t3, t4)
-        self.Bk = t5 + (t1 / b1)
+        self.Bk = t5 + gamma*t1
 
     def dpf(self):
         count = 0
@@ -56,6 +68,7 @@ class DPF:
             if self.check_convergence():
                 break
             self.update_B(yk, sk)
+            # break
             self.xk = self.xk1
             self.vars = new_vars_list
         print(count)

@@ -52,7 +52,9 @@ def multi_var():
     lam2 = np.arange(-5, 3, delta) 
     Lam1, Lam2 = np.meshgrid(lam1, lam2) 
     value = Lam1 ** 2 + Lam2 ** 2 - 3 * Lam1 * Lam2 -4
+    fig = plt.subplots(1,1, figsize = (10,7))
     CS = plt.contour(Lam1, Lam2, value,levels = 30) 
+
     plt.scatter(x0,y0,color = "red",label = "Initialization")
     plt.scatter(ans[0],ans[1],color = "green",label = "root found") 
     plt.clabel(CS, inline=1, fontsize=10) 

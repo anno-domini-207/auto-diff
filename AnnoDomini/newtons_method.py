@@ -23,10 +23,10 @@ class Newton:
             return False
 
     def update_x(self,df):
-        self.xnew = self.xold - self.alpha * self.f(xold)/ self.f(df).der
+        self.xnew = self.xold - self.alpha * self.f(self.xold)/ self.f(df).der
 
-    def scalar_newton(self):
-        for i in range self.maxiter:
+    def find_root(self):
+        for i in range(self.maxiter):
             df = AD.AutoDiff(self.xold)
             self.update_x(df)
             if self.check_convergence():

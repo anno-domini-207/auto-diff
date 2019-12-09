@@ -9,4 +9,5 @@ Anno Domini's Documentation
    how_to_use
    software_organization
    implementation
+   additional_features
    future

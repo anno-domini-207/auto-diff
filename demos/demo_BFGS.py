@@ -8,7 +8,6 @@ import AnnoDomini.AutoDiff as AD
 import numpy as np
 from matplotlib import pyplot as plt
 from BFGS import BFGS
-from matplotlib import pyplot as plt
 
 
 def f(args):

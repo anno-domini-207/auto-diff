@@ -29,10 +29,30 @@ Basic Modules
 
   - Contains implementation of the master class and its methods for calculating derivatives of elementary functions (list of methods shown in **Core Classes** section below).
 
+- newtons_method.py
+
+  - Contains implementation of the root finding algorithm, Newton's Method
+
+- steepest_descent.py
+
+  - Contains implementation of the optimization method, Steepest Descent
+
+- BFGS.py
+
+  - Contains implementation of the optimization method, BFGS
+
+- DFP.py
+
+  - Contains implementation of the optimization method, BFGS
+
+- hamilton_mc.py
+
+  - Contains the simulation method, Hamiltonian Monte Carlo
+
 Testing
 -------
 
-Our tests are contained in ``tests/`` directory. 
+Our tests are contained in ``tests/`` directory.
 
 - ``test_AutoDiff`` test_AutoDiff.py is used to test the functions in the AutoDiff Class. It includes tests for both scaler and vector inputs and outputs to ensure our core implementation is correct for general cases.
 

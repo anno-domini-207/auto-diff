@@ -15,13 +15,13 @@ def f(args):
 
 
 def test_dfp():
-    demo = DPF(f, np.array([0, 0]))
+    demo = DFP(f, np.array([0, 0]))
     roots = demo.find_root()
     assert ((roots[0] + 0.438378) < 1e-6 and (roots[1] - 0.438378) < 1e-6)
-    demo = DPF(f, np.array([1, 1]))
+    demo = DFP(f, np.array([1, 1]))
     roots = demo.find_root()
     assert ((roots[0] + 0.438378) < 1e-6 and (roots[1] - 0.438378) < 1e-6)
-    demo = DPF(f, np.array([10, -10]))
+    demo = DFP(f, np.array([10, -10]))
     roots = demo.find_root()
     assert ((roots[0] + 0.438378) < 1e-6 and (roots[1] - 0.438378) < 1e-6)
 

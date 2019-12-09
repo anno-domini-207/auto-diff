@@ -3,6 +3,7 @@
 
 Anno Domini is equivalent to Automatic Differentiation because they have the same abbreviation (AD).
 
+
 ## Quick Start
 
 ### Installation
@@ -24,7 +25,7 @@ $ python
 $ deactivate
 ```
 
-### Single Variable, Single Function
+### Use Case 1: Single Variable, Single Function
 
 ```python
 >>> x = AD.AutoDiff(1.5)
@@ -36,7 +37,7 @@ $ deactivate
 5.0
 ```
 
-### Multiple Variables, Single Function
+### Use Case 2: Multiple Variables, Single Function
 
 ```python
 >>> x = AD.AutoDiff(3., [1., 0.])
@@ -49,7 +50,7 @@ $ deactivate
 [2. 3.]
 ```
 
-### Single Variable, Multiple Functions
+### Use Case 3: Single Variable, Multiple Functions
 
 ```python
 >>> x = AD.AutoDiff(3., 1.)
@@ -62,7 +63,7 @@ $ deactivate
 [6. 2.]
 ```
 
-### Multiple Variables, Multiple Functions
+### Use Case 4: Multiple Variables, Multiple Functions
 
 ```python
 >>> x = AD.AutoDiff(3., [1., 0.])
@@ -77,6 +78,7 @@ $ deactivate
  [2. 3.]]
 ```
 
+
 ## More Resources
 
 **Documentation: [https://cs207-finalproject-group15.readthedocs.io/en/latest/](https://cs207-finalproject-group15.readthedocs.io/en/latest/)**
@@ -86,7 +88,7 @@ $ deactivate
 
 ## Authors (CS207 Group 15):
 
-- Simon Warchol
-- Kaela Nelson
-- Qiuyang Yin
-- Sangyoon Park
+- Simon Warchol (simonwarchol@g.harvard.edu)
+- Kaela Nelson (kwnelson@hsph.harvard.edu)
+- Qiuyang Yin (qiuyangyin@g.harvard.edu)
+- Sangyoon Park (sangyoonpark@g.harvard.edu)

@@ -191,7 +191,7 @@ class AutoDiff:
         return AutoDiff(val, der)
 
     def tanh(self):
-        if np.cosh(self.val) == 0:
+        if np.cosh(self.val) == 0:#pragma: no cover
             raise ZeroDivisionError
         val = np.tanh(self.val)
         der = (1 / (np.cosh(self.val) ** 2)) * self.der

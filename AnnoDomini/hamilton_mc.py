@@ -89,7 +89,7 @@ def HMC(q_init, target_pdf = None, D = None, U = None,
     temp = np.array(output)
     return temp[burn_in::thinning], accepts * 1. / chain_len
 
-if __name__ == '__main__':
+if __name__ == '__main__':#pragma: no cover
     import matplotlib.pyplot as plt
     def norm_function(x):
         var = 1

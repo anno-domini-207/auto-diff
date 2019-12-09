@@ -23,6 +23,8 @@ class BFGS:
         self.xk = x0  # x0 = (n,1) vector
         self.xk1 = x0
         self.tol = tol
+        self.xs = []
+        self.count = 0
         self.niter = niter
 
     def check_convergence(self):
@@ -42,6 +44,7 @@ class BFGS:
         count = 0
         while count < self.niter:
             count = count + 1
+            self.xs.append(self.xk)
             gradient = self.vars.der
             sk = la.solve(-self.Bk, gradient)
             self.xk1 = self.xk + sk
@@ -51,21 +54,12 @@ class BFGS:
                 guesses = np.zeros(len(self.xk1))
                 guesses[i] = 1
                 new_vars_list.append(AD.AutoDiff(variable, guesses))
-            new_vars_list = f(new_vars_list)
+            new_vars_list = self.f(new_vars_list)
             yk = new_vars_list.der - gradient
             if self.check_convergence():
                 break
             self.update_B(yk, sk)
             self.xk = self.xk1
             self.vars = new_vars_list
+        self.count = count
         return self.xk
-
-
-def f(args):
-    [x, y] = args
-    return 100 * (y - x ** 2) ** 2 + (1 - x) ** 2
-
-
-test = BFGS(f, np.array([-1, 1])).bfgs()
-
-print(test)

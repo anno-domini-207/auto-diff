@@ -19,7 +19,7 @@ class BFGS:
 
         self.vars = f(self.vars)
 
-        self.Bk = np.eye(x0.shape[0])
+        self.Bk = np.eye(np.shape(x0)[0])
         self.xk = x0  # x0 = (n,1) vector
         self.xk1 = x0
         self.tol = tol
@@ -40,7 +40,7 @@ class BFGS:
         b2 = np.dot(np.dot(sk.T, self.Bk), sk)
         self.Bk = self.Bk + (t1 / b1 - t2 / b2)
 
-    def bfgs(self):
+    def find_root(self):
         count = 0
         while count < self.niter:
             count = count + 1

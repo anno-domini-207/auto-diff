@@ -5,7 +5,7 @@ import numpy as np
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 #from AnnoDomini.AutoDiff import AutoDiff as AD
-from AnnoDomini.DFP import DPF
+from AnnoDomini.DFP import DFP
 
 def f(args):
     [x, y] = args
@@ -16,13 +16,13 @@ def f(args):
 
 def test_dfp():
     demo = DPF(f, np.array([0, 0]))
-    roots = demo.dpf()
+    roots = demo.find_root()
     assert ((roots[0] + 0.438378) < 1e-6 and (roots[1] - 0.438378) < 1e-6)
     demo = DPF(f, np.array([1, 1]))
-    roots = demo.dpf()
+    roots = demo.find_root()
     assert ((roots[0] + 0.438378) < 1e-6 and (roots[1] - 0.438378) < 1e-6)
     demo = DPF(f, np.array([10, -10]))
-    roots = demo.dpf()
+    roots = demo.find_root()
     assert ((roots[0] + 0.438378) < 1e-6 and (roots[1] - 0.438378) < 1e-6)
 
 

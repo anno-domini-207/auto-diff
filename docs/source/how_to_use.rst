@@ -28,7 +28,8 @@ How to Install
     $ pip install AnnoDomini
     $ python
     >>> import AnnoDomini.AutoDiff as AD
-    >>> AD.AutoDiff(3.0)
+    >>> x = AD.AutoDiff(3.0)
+    >>> print(x)
     ====== Function Value(s) ======
     3.0
     ===== Derivative Value(s) =====
@@ -36,7 +37,7 @@ How to Install
     >>> quit()
     $ deactivate
 
-.. note:: Numpy and Pytest are also required. If they are missing an error message will indicate as much.
+.. note:: For using additional features, SciPy and tqdm packages are also required.
 
 Basic Demos
 ------------
@@ -44,7 +45,7 @@ Basic Demos
 1. Single Variable, Single Function (:math:`\mathbb{R}^1 \rightarrow \mathbb{R}^1`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Suppose we want to to find the derivative of :math:`x^2+2x+1`. We can the utilize the AnnoDomini package as follows:
+Suppose we want to find the derivative of :math:`x^2+2x+1`. We can utilize the AnnoDomini package as follows:
 
 .. code-block:: python
 
@@ -54,8 +55,8 @@ Suppose we want to to find the derivative of :math:`x^2+2x+1`. We can the utiliz
     1.5
     ===== Derivative Value(s) =====
     1.0
-    >>> z = x**2 + 2*x + 1
-    >>> print(z)
+    >>> f = x**2 + 2*x + 1
+    >>> print(f)
     ====== Function Value(s) ======
     6.25
     ===== Derivative Value(s) =====
@@ -65,9 +66,9 @@ We can access only the value or derivative component as follows:
 
 .. code-block:: python
 
-    >>> print(z.val)
+    >>> print(f.val)
     6.25
-    >>> print(z.der)
+    >>> print(f.der)
     5.0
 
 Other elementary functions can be used in the same way.  For instance, we may evaluate the derivative of :math:`log_{2}(x)+arctan(3x+5)` at :math:`x = 10.0` as follows:
@@ -75,28 +76,28 @@ Other elementary functions can be used in the same way.  For instance, we may ev
 .. code-block:: python
 
     >>> x = AD.AutoDiff(10.0)
-    >>> z = x.log(2) + np.arctan(3 * x + 5)
-    >>> print(z)
+    >>> f = x.log(2) + np.arctan(3 * x + 5)
+    >>> print(f)
     ====== Function Value(s) ======
     4.864160763843499
     ===== Derivative Value(s) =====
     0.14671648614436125
 
-.. note:: for the single variable, we don't need to put the scaler number to the list. The AutoDiff class is smart enough to handle this case.
+.. note:: For the single variable case, we do not need to input the scalar number in the form of a list (i.e. using brackets); the AutoDiff class is smart enough to handle the scalar form as appropriate.
 
 2. Multiple Variables, Single Function (:math:`\mathbb{R}^m \rightarrow \mathbb{R}^1`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Consider the case where the user would like to input the function,
 :math:`f = xy`. Then, the derivative of this would be represented in a Jacobian matrix,
-:math:`J = [\frac{df_1}{dx}, \frac{df_1}{dy}] = [y,x]`.
+:math:`J = [\frac{df}{dx}, \frac{df}{dy}] = [y,x]`.
 
 .. code-block:: python
 
     >>> x = AD.AutoDiff(3., [1., 0.])
     >>> y = AD.AutoDiff(2., [0., 1.])
-    >>> z = x*y
-    >>> print(z)
+    >>> f = x*y
+    >>> print(f)
     ====== Function Value(s) ======
     6.0
     ===== Derivative Value(s) =====
@@ -107,17 +108,20 @@ Consider the case where the user would like to input the function,
 
 Consider the case where the user would like to input the two functions,
 :math:`F = [x^2, 2x]`. Then, the derivative of this would be represented in a Jacobian matrix,
-:math:`J = [\frac{df_1}{dx}, \frac{df_1}{dy}] = [2x,2]`.
+:math:`J = [\frac{df_1}{dx}, \frac{df_2}{dx}] = [2x,2]`.
 
 .. code-block:: python
 
     >>> x = AD.AutoDiff(3., 1.)
-    >>> z = AD.AutoDiff([x**2, 2*x])
-    >>> print(z)
+    >>> f1 = x**2
+    >>> f2 = 2*x
+    >>> print(AD.AutoDiff([f1, f2]))
     ====== Function Value(s) ======
     [9. 6.]
     ===== Derivative Value(s) =====
     [6. 2.]
+
+.. note:: For evaluating multiple functions, the AutoDiff class expects the functions to be input as a Python list (i.e. using brackets); other data structures (e.g., NumPy array) are not supported.
 
 4. Multiple Variables, Multiple Functions (:math:`\mathbb{R}^m \rightarrow \mathbb{R}^n`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,8 +134,9 @@ Consider the case where the user would like to input the two functions,
 
     >>> x = AD.AutoDiff(3., [1., 0.])
     >>> y = AD.AutoDiff(2., [0., 1.])
-    >>> z = AD.AutoDiff([x+y, x*y])
-    >>> print(z)
+    >>> f1 = x+y
+    >>> f2 = x*y
+    >>> print(AD.AutoDiff([f1, f2]))
     ====== Function Value(s) ======
     [5. 6.]
     ===== Derivative Value(s) =====

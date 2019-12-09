@@ -1,13 +1,17 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../Optimization')))
+
 from numpy import linalg as la
 import AnnoDomini.AutoDiff as AD
 import numpy as np
 import numpy
 
-'''Note: So far, this is BFGS for vector inputs, and we have to adjust for the different
-number of input and output types and possible scalar and multivariable input cases.'''
 
 
-class BFGS:
+class DPF:
     def __init__(self, f, x0, niter=2000, tol=10 ** (-8)):
         self.f = f
         self.vars = []
@@ -16,9 +20,7 @@ class BFGS:
             guesses = np.zeros(len(x0))
             guesses[i] = 1
             self.vars.append(AD.AutoDiff(variable, guesses))
-
         self.vars = f(self.vars)
-
         self.Bk = np.eye(x0.shape[0])
         self.xk = x0  # x0 = (n,1) vector
         self.xk1 = x0
@@ -32,13 +34,23 @@ class BFGS:
             return False
 
     def update_B(self, yk, sk):
+        I = (np.eye(yk.shape[0]))
         t1 = np.outer(yk, yk.T)
         b1 = np.dot(yk.T, sk)
-        t2 = np.dot(np.outer(np.dot(self.Bk, sk), sk.T), self.Bk)
-        b2 = np.dot(np.dot(sk.T, self.Bk), sk)
-        self.Bk = self.Bk + (t1 / b1 - t2 / b2)
+        # b1 = 1 / np.dot(yk.T, sk)
+        gamma = 1 / b1
 
-    def bfgs(self):
+        t2 = I - gamma*(np.outer(yk, sk.T))
+        # print(yk.shape, sk.shape, gamma.shape)
+        # print(self.Bk.shape, b1)
+
+        t3 = np.dot(t2, self.Bk)
+        t4 = I - gamma*(np.outer(sk, yk.T))
+        # print(t4.shape)
+        t5 = np.dot(t3, t4)
+        self.Bk = t5 + gamma*t1
+
+    def dpf(self):
         count = 0
         while count < self.niter:
             count = count + 1
@@ -56,8 +68,10 @@ class BFGS:
             if self.check_convergence():
                 break
             self.update_B(yk, sk)
+            # break
             self.xk = self.xk1
             self.vars = new_vars_list
+        print(count)
         return self.xk
 
 
@@ -66,6 +80,6 @@ def f(args):
     return 100 * (y - x ** 2) ** 2 + (1 - x) ** 2
 
 
-test = BFGS(f, np.array([-1, 1])).bfgs()
+test = DPF(f, np.array([-1, 1])).dpf()
 
 print(test)

@@ -45,6 +45,31 @@ Our method works for both single and multivariable inputs, and single output fun
 
 BFGS
 ~~~~
+BFGS, or the Broyden–Fletcher–Goldfarb–Shanno algorithm, is a
+first-order quasi-Newton optimization method, which approximates the Hessian matrix with the gradient and direction of a function.
+The algorithm is as follows, in terms of the Approximate Hessian, :math:`B_k`, the step  :math:`s_k`, and :math:`y_k`
+
+1. Solve for :math:`s_k` by solving the linear system :math:`B_k s_k = -y_k`
+2. :math:`x_{k+1} = s_k + x_k`
+3. :math:`y_k = \nabla x_{k+1} -  \nabla x_{k}`
+4. :math:`B_{k+1} =  B_k + \frac{y_k y_k^T}{y_k^T s_k} + \frac{B_k s_k s_k^T B_k}{s_k^T B_k s_k}`
+5. Terminate when :math:`s_k <` Tolerance
+
+A full demo of this method is available in the demos subdirectory
+
 
 DFP
 ~~~
+DFP, or the Davidon–Fletcher–Powell formula, is another
+first-order quasi-Newton optimization method, which also approximates the Hessian matrix with the gradient and direction of a function.
+The algorithm is as follows, in terms of the Approximate Hessian, :math:`B_k`, the step  :math:`s_k`, :math:`\gamma_k  = \frac{1}{y_k^T s_k}`
+
+1. Solve for :math:`s_k` by solving the linear system :math:`B_k s_k = -y_k`
+2. :math:`x_{k+1} = s_k + x_k`
+3. :math:`y_k = \nabla x_{k+1} -  \nabla x_{k}`
+4. :math:`B_{k+1} =  (I - \gamma_k y_k s_k^T)B_k(I - \gamma_k s_k y_k^T) + \gamma_k y_k y_k^T`
+5. Terminate when :math:`s_k <` Tolerance
+
+A full demo of this method is available in the demos subdirectory.
+
+**Note:**  DFP is empirically significantly less performant than BFPS. For instance, it may take up to 1 million iterations to converge on the Rosenbrock function.

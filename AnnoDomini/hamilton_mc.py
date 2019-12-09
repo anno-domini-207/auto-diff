@@ -8,7 +8,6 @@ Created on Sat Dec  7 16:05:51 2019
 import AnnoDomini.AutoDiff as AD
 from tqdm import tqdm
 import numpy as np
-import matplotlib.pyplot as plt
 
 def HMC(q_init, target_pdf = None, D = None, U = None, 
           chain_len = 1000, T = 5, burn_in = 0, thinning = 1, epsilon = 0.1, randomseed = 2019):
@@ -91,6 +90,7 @@ def HMC(q_init, target_pdf = None, D = None, U = None,
     return temp[burn_in::thinning], accepts * 1. / chain_len
 
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
     def norm_function(x):
         var = 1
         denom = (2*np.pi*var)**.5

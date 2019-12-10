@@ -34,7 +34,7 @@ def plot_descent(ans):
     plt.contour(X, Y, Z)
     plt.plot(ans[:,0], ans[:,1], "-.", label="Trajectory")
     plt.scatter(root[0],root[1], label="Root", c="red")
-    plt.scatter(-1,1, label="Initial Guess", c ="orange")
+    plt.scatter(2,1, label="Initial Guess", c ="orange")
     plt.title("Convergence of Steepest Descent on Rosenbrock Function")
     plt.xlim(-3, 3)
     plt.ylim(-2, 8)

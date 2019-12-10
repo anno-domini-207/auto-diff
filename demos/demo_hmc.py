@@ -106,8 +106,8 @@ def demo_describe():
     print("quantiles(25%, 75%) = {}".format(d['quantiles']))
 
 
-demo_normal()
+#demo_normal()
 #demo_weibull()
-#demo_describe()
+demo_describe()
 
 

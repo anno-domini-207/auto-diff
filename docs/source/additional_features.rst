@@ -465,4 +465,155 @@ A full demo of this method is available in the demos subdirectory.
 Hamiltonian Monte Carlo
 -----------------------
 
+Background
+~~~~~~~~~~
+
+In computational physics and statistics, the Hamiltonian Monte Carlo algorithm is a Markov chain Monte Carlo method for obtaining a sequence of random samples which converge to being distributed according to a target probability distribution for which direct sampling is difficult. This sequence can be used to estimate integrals with respect to the target distribution (expected values).
+
+Hamiltonian Monte Carlo corresponds to an instance of the Metropolis–Hastings algorithm, with a Hamiltonian dynamics evolution simulated using a time-reversible and volume-preserving numerical integrator (typically the leapfrog integrator) to propose a move to a new point in the state space. Compared to using a Gaussian random walk proposal distribution in the Metropolis–Hastings algorithm, Hamiltonian Monte Carlo reduces the correlation between successive sampled states by proposing moves to distant states which maintain a high probability of acceptance due to the approximate energy conserving properties of the simulated.
+
+An easy way to implement Hamiltonian Monte Carlo is to use leap frog Integrator. The implementation is as follows:
+
+Let :math:`\pi(q)` be our target distribution with :math:`q\in \mathbb{R}^D`. We turn :math:`\pi` into an energy function :math:`U(q)` by :math:`U(q) = - \log(\pi(q))`. We choose a kinetic energy function :math:`K(p)`.
+
+0. start with a random :math:`q^{(0)}\in\mathbb{R}^D`
+
+1. repeat:
+
+- A. (kick-off) sample a random momentum from the Gibbs distribution of :math:`K(p)`, i.e.
+:math:`p^{(current)} \sim \frac{1}{Z} \exp(-K(p))`
+
+- B. (simulate movement) simulate Hamiltonian motion for :math:`L` steps each with time interval :math`\epsilon`, using the leap-frog integrator. 
+
+	- a. Repeat for T - 1 times, for :math:`p^{(\text{step } 0)} = p^{(current)}`, :math:`q^{(\text{step } 0)} = q^{(current)}`
+	
+		- i.(half-step update for momentum) :math:`p^{(\text{step } t + 1/2)} \leftarrow  p^{(\text{step } t)} - \epsilon/2 \frac{\partial U}{\partial q}(q^{(\text{step } t)})`
+		
+		- ii.(full-step update for position) :math:`q^{(\text{step } t + 1)} \leftarrow q^{(\text{step } t)} + \epsilon \frac{\partial K}{\partial p}(p^{(\text{step } t}))`
+		
+		- iii. (half-step update for momentum) :math:`p^{(\text{step } t + 1)} \leftarrow  p^{(\text{step } t + 1/2)} - \epsilon/2 \frac{\partial U}{\partial q}(q^{(\text{step } t + 1)})`
+	
+	- b.(reverse momentum) :math:`p^{(\text{step}T)} \leftarrow -p^{(\text{step}T)}`
+
+- C. (correction for simulation error) implement Metropolis-Hasting accept mechanism: 
+
+	- a. compute :math:`\alpha = \min\left(1, \exp\left\{H(q^{(current)}, p^{(current)}) - H(q^{(\text{step } T)}, p^{(\text{step } T)})\right\} \right)`
+	
+	- b. sample :math:`U\sim U(0, 1)`, if :math:`U \leq \alpha`then accept, else keep old sample
+
+In our implementation, we use the simplist Euclidean-Gaussian Kinetic Energy function, i.e.
+
+:math:`K(p) = \frac{1}{2} p^\top M^{-1} p + \frac{1}{2}\log|M| + \frac{D}{2} \log(2\pi)`
+
+API
+~~~
+``HMC``:
+
+- ``q_init``: initial point to start with. For the scaler case, we support both scaler and list input like [0].
+
+- ``target_pdf`` and ``Ù``. Target density function to sample from and target negative log (density function). If target_pdf is provided, U would be calculated via:
+
+.. code-block:: python
+
+	U = lambda q: -np.log(target_pdf(q))
+
+However, since there would be cases where negative log density function is easier to obtain, users can specify U directly. In this case, target_pdf would be ignored.
+
+- ``D``: dimension of the input. Could be infered from the q_init and also could be specified directly.
+
+- ``chain_len``: length of hamiltonian monte carlo chain. default 1000
+
+- `` T``: length of leapfrog in HMC, default 5
+
+-  ``burn_in``, ``thinning``: burn in and thinning to the chain. default 0 and 1
+
+- ``epsilon``:  step length in the HMC for the leap-frog.
+
+``describe``: a straight forward way to estimate the mean, variance and quantiles for a certain distribution based on HMC.
+
+The ``describe`` shares same parameters with HMC. It returns a dict where the mean, variance and quantiles are stored in the "mean", "var" and "quantiles".
+
+
+Demos
+~~~~~
+
+Here is a demo for singular Gaussian family.
+
+.. code-block:: python
+
+	>>> import numpy as np
+	>>> from AnnoDomini.hamilton_mc import HMC, describe
+	>>> def norm_function(mu = 0, var = 1):
+		def norm(x):
+			denom = (2*np.pi*var)**.5
+			num = np.exp(-(x-mu)**2/(2*var))
+			return num/denom
+		return norm
+
+	>>> start_point = -10.0 # start from far apart
+	>>> func = norm_function(1,1)
+
+	>>> chain,accepts_ratio = HMC(target_pdf = func, burn_in=200, thinning=2,chain_len=10000, q_init=[start_point],epsilon = 0.05)
+	100%|██████████| 10000/10000 [00:05<00:00, 1706.38it/s]
+	>>> print("Accepts ratio = {}".format(accepts_ratio))
+	Accepts ratio = 0.9919
+	>>> print(chain.shape)
+	(4900, 1)
+
+.. note:: accepts_ratio is a good indicator for the quanlity of the chain. it should be greater than 90%. If not, try to adjust epsilon and T in the leap-frog stage.
+
+We can visually check the correctness of HMC by:
+
+.. code-block:: python
+
+    q = chain[:,0]
+    fig,ax = plt.subplots(1,1,figsize = (8,5))
+    x = np.linspace(-4,4)
+    ax.plot(x,func(x),color = "black",label = "actual pdf")
+    ax.hist(q,bins = 50, density = True, color = "blue",alpha = 0.3, label = "histogram of samples")
+    ax.set_title("Actual pdf vs sampling by hamiltonian monte carlo")
+    ax.legend()
+
+.. figure:: hmc_simulation_normal.png
+    :width: 2000px
+    :align: center
+    :height: 500px
+    :alt: alternate text
+    :figclass: align-center
+	
+And describe function could be used to estimate mean and variance by:
+
+.. code-block:: python
+
+	>>> import numpy as np
+	>>> from AnnoDomini.hamilton_mc import HMC, describe
+	>>> def norm_function(mu = 0, var = 1):
+		def norm(x):
+			denom = (2*np.pi*var)**.5
+			num = np.exp(-(x-mu)**2/(2*var))
+			return num/denom
+		return norm
+
+	>>> start_point = -10.0 # start from far apart
+	>>> func = norm_function(1,0.1)
+
+	>>> chain,accepts_ratio = describe(target_pdf = func, burn_in=200, thinning=2,chain_len=10000, q_init=[start_point],epsilon = 0.05)
+	100%|██████████| 10000/10000 [00:05<00:00, 1706.38it/s]
+	
+	>>> print("Accepts ratio = \{\}".format(accepts_ratio))
+	Accepts ratio = 0.9267
+
+.. code-block:: python
+
+	>>> print("Mean = \{\}".format(d['mean'])) # 1
+	Mean = 0.9976236280753902
+	>>> print("Var = \{\}".format(d['var'])) # 0.1
+	Var = 0.1267435837161925
+	>>> print("quantiles(25%, 75%) = \{\}".format(d['quantiles']))
+	quantiles(25%, 75%) = [0.75131308 1.23747691]
+	
+A full demo of this method is available in the demos subdirectory. (Includes the weibull distribution)
+
+
+
 
